@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Environment files (never commit real secrets)
+.env
+.env.*
+!.env.example
+
+# Build output
+client/dist/
+dist/
+build/
+
+# Logs and caches
+*.log
+npm-debug.log*
+.eslintcache
+.vite/
+coverage/
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Archives
+*.zip
