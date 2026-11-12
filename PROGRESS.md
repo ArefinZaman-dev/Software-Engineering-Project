@@ -2,9 +2,31 @@
 
 Last updated: 12 Oct 2026
 
-## Current state: Increments 1-4 complete and verified by the developer (117/117 tests; browser flows confirmed). Increment 5 (completion, reviews, messaging, reports) is written, lint-clean, and syntax-checked; the developer must run `npm test` (expect 186) and checklist items 31-42 next. After that: Increment 6 (admin panel).
+## Current state: Increments 1-5 complete; the developer reports Increment 5 runs properly (the full `npm test` count was not shown to the author). Increment 6 (admin panel) is written, lint-clean, and syntax-checked but NOT yet run against MongoDB. Next: run `npm test` (expect 246) and checklist items 43-53, then Increment 7 (final verification, report, viva preparation).
 
-## Increment 5 - Completion, reviews, messaging, reports (written, NOT yet run against MongoDB)
+## Increment 6 - Admin panel (written, NOT yet run against MongoDB)
+
+**Completed**
+- `/api/admin/*` (admin only): richer statistics; users (search, filters, pagination, suspend, reactivate); jobs (remove, restore); reviews (remove, restore, rating recalculated both ways); reports (list, start review, resolve, dismiss with a note); categories (list with job counts, create, rename, deactivate, delete only when unused).
+- Rules: admins cannot be suspended (including self); removed jobs vanish from discovery, details, applying, and reporting but nothing is deleted; their poster still sees them marked Removed and cannot edit; closing a report lets the reporter report that target again.
+- Client: six admin pages (Dashboard, Users, Jobs, Reviews, Reports, Categories), shared `AdminListShell`, `usePagedList`, `useAction`; admin menu; My jobs marks a removed job.
+- Also included: chat threads now check for new messages every 5 seconds (polling), requested after Increment 5 testing.
+- 60 new server tests (246 total); docs updated (API, DECISIONS B10-B15 and D42-D45, SRS, TESTING, MANUAL_VERIFICATION checklist 43-53, README, LEARNING_GUIDE).
+- One earlier test changed: the stats test in `authorization.test.js` compared the whole stats object, so it now checks the three original keys (the stats gained more keys).
+
+**Verification actually done (author's sandbox)**
+| Check | Result |
+|---|---|
+| ESLint, client and server | Clean |
+| `node --check` on all server files and tests | Passed |
+| App loads; all 18 admin routes registered | Confirmed |
+| 60 new database tests, browser flow, `vite build` | **NOT run** (no MongoDB or Vite binaries in the sandbox) |
+
+**Assumptions to confirm** (Section 33 was not available): B10-B15 in DECISIONS.md.
+
+**Not in this increment (by plan):** suspension reasons or expiry, appeals, an audit log of admin actions (ideas for Version 2).
+
+## Increment 5 - Completion, reviews, messaging, reports (developer reports it runs properly)
 
 **Completed**
 - `POST /api/jobs/:id/complete` (poster, IN_PROGRESS only; job and accepted application become COMPLETED).

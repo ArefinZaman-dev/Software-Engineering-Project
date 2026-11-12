@@ -13,7 +13,12 @@ import NotFoundPage from './pages/NotFoundPage.jsx';
 import PublicProfilePage from './pages/PublicProfilePage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import ReviewJobPage from './pages/ReviewJobPage.jsx';
+import AdminCategoriesPage from './pages/admin/AdminCategoriesPage.jsx';
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
+import AdminJobsPage from './pages/admin/AdminJobsPage.jsx';
+import AdminReportsPage from './pages/admin/AdminReportsPage.jsx';
+import AdminReviewsPage from './pages/admin/AdminReviewsPage.jsx';
+import AdminUsersPage from './pages/admin/AdminUsersPage.jsx';
 import CreateJobPage from './pages/poster/CreateJobPage.jsx';
 import EditJobPage from './pages/poster/EditJobPage.jsx';
 import JobApplicantsPage from './pages/poster/JobApplicantsPage.jsx';
@@ -83,6 +88,11 @@ export default function App() {
       <Route element={<ProtectedRoute roles={[ROLES.ADMIN]} />}>
         <Route element={<AppLayout />}>
           <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/users" element={<AdminUsersPage />} />
+          <Route path="admin/jobs" element={<AdminJobsPage />} />
+          <Route path="admin/reviews" element={<AdminReviewsPage />} />
+          <Route path="admin/reports" element={<AdminReportsPage />} />
+          <Route path="admin/categories" element={<AdminCategoriesPage />} />
         </Route>
       </Route>
     </Routes>

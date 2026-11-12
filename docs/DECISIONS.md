@@ -93,10 +93,26 @@ The build brief's Section 33 was not available when Increment 5 was written, so 
 | D35 | Messages live at `/api/conversations/:id/messages` | A message only exists inside a conversation, so nesting avoids a separate `/api/messages` group. |
 | D36 | Reviewer, reviewee, and report status are never taken from the request | zod drops unknown fields; the server derives the reviewee from the job. Prevents reviewing the wrong person or self-resolving a report. |
 | D37 | Rating summary is recalculated from the reviews collection after every new review | Derived data (D17); rounding to one decimal. Trade-off: two reviews landing at the same instant could briefly leave a stale summary; recalculating again fixes it. |
-| D38 | Messaging is not real-time | Per SRS scope. The thread has a Refresh button; Socket.IO is a Version 2 item. |
+| D38 | Messaging is near-real-time by polling, not true real-time | Per SRS scope. An open thread checks for new messages every 5 seconds (only while the tab is visible and the thread is writable), and also has a Refresh button. Failed checks are ignored silently. Socket.IO (instant push) is a Version 2 item. |
 | D39 | A suspended user's conversations, reviews, and profile are hidden from others | Same rule as D21. |
 | D40 | One active report per reporter and target, enforced by a partial unique index | Resolved or dismissed reports free the slot (needs `isActive`, kept in step by a save hook). |
 | D41 | The conversation list uses one aggregation for last message and unread counts | Avoids two queries per conversation. |
+
+## Increment 6 additions
+As with Increment 5, Section 33 was not available, so these are choices made from the SRS and database design. **Check them against Section 33.**
+
+| # | Open detail | Choice |
+|---|---|---|
+| B10 | Can an admin suspend another admin, or themselves? | No. Admin accounts are never suspended or reactivated through the API (`400`). Prevents locking every admin out. |
+| B11 | What does "remove a job" do to its applications and conversations? | Nothing. The job is hidden (B1) and nothing is deleted, so it can be restored. Its poster still sees it in My jobs, marked removed, but cannot edit it. |
+| B12 | Does resolving a report act on the reported job or person? | No. Resolving or dismissing only closes the report. The admin removes the job or suspends the user as a separate, visible step (the Reports page offers both buttons next to the report). |
+| B13 | Report status flow | `PENDING → REVIEWING → RESOLVED` or `DISMISSED`; a pending report may be closed directly. Closed reports cannot be reopened. Closing frees the reporter to report that target again (D40). |
+| B14 | Can admins restore a removed review? | Yes, and the rating summary is recalculated both ways. The author still cannot replace it (B9). |
+| B15 | Category with jobs | Can be deactivated or renamed, never deleted (`409`). Names must contain an English letter or digit so the slug is never empty. |
+| D42 | `/api/admin/stats` returns more keys | The original `totalUsers`, `students`, `posters` keep their names. The one existing test that compared the whole object now checks those three keys, and `adminStats.test.js` checks the full set. |
+| D43 | Admin list pages share one pattern | Plain objects built in the service with only the fields an admin needs (the User model's JSON adds derived fields like `profileCompletion`); one `AdminListShell` component and two hooks (`usePagedList`, `useAction`) on the client. |
+| D44 | Report status changes use `document.save()` | So the `pre('save')` hook keeps `isActive` correct (see Report model). |
+| D45 | Search text is escaped before use in a regex | `utils/escapeRegex.js`, so typing `c++` or `(` searches literally and cannot break or slow the query. |
 
 ## Bug fix log
 | # | Bug | Root cause | Fix |

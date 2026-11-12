@@ -10,7 +10,7 @@ Run from `server/`: `npm test` (Node's built-in runner, files run one at a time 
 ## Safety
 Tests delete all data in `MONGODB_URI_TEST`. The config refuses to run unless that database name contains "test" and differs from `MONGODB_URI`.
 
-## Test inventory (186 tests)
+## Test inventory (246 tests)
 
 | File | Tests | Covers |
 |---|---|---|
@@ -28,7 +28,14 @@ Tests delete all data in `MONGODB_URI_TEST`. The config refuses to run unless th
 | `conversations.test.js` | 23 | Open (poster/student, idempotent, status rules, strangers, suspended), send (validation, read-only statuses, strangers), read marking, list (unread counts, last message, ordering, hides suspended) |
 | `reports.test.js` | 11 | File job/user reports, duplicate active report blocked, re-report after resolve, own job/self, hidden targets 404, validation incl. OTHER needs description, status in body ignored |
 
-Later increments add admin and moderation tests.
+| `adminStats.test.js` | 3 | Empty platform, every count (removed jobs/reviews and closed reports excluded), admin only |
+| `adminUsers.test.js` | 15 | List, search (incl. special characters), filters, pagination, suspend (token and login blocked at once, poster's jobs hidden), reactivate, admins and self protected, role checks |
+| `adminJobs.test.js` | 9 | List with filters, remove/restore (hidden from discovery and details), applications untouched, apply and report blocked, poster sees but cannot edit |
+| `adminReviews.test.js` | 7 | List and filters, remove/restore recalculates the rating, hidden from profile, 409s, role checks |
+| `adminReports.test.js` | 12 | Job and user report details, status filter, review/resolve/dismiss, closed reports locked, duplicate blocked while open and allowed after closing, deleted target, input ignored, role checks |
+| `adminCategories.test.js` | 14 | List with job counts, create (slug, duplicates, bad names), rename, deactivate (public list, new jobs, existing jobs), delete rules, role checks |
+
+Increment 7 is final verification, not new features.
 
 ## Real results so far
 
@@ -37,6 +44,7 @@ Later increments add admin and moderation tests.
 | Increments 1-2 (51 tests): run by the developer on their own machine, real MongoDB | **51 passed, 0 failed** |
 | Increment 3 (83 tests total after bug fix BF1) | **Run by the developer: 83 passed, 0 failed** |
 | Increment 4 (34 new tests, 117 total) | **Not yet executed** - written and syntax-checked only. Run `npm test` and report the result |
-| Increment 5 (69 new tests, 186 total) | **Not yet executed against MongoDB** (the sandbox has no database). Written and syntax-checked; 7 DB-free tests re-run and pass |
+| Increment 5 (69 tests) | Run by the developer: all passed (186 total at that point) |
+| Increment 6 (60 new tests, 246 total) | **Not yet executed against MongoDB** (the sandbox has no database). Written and syntax-checked |
 | ESLint, client and server (author's sandbox, after Increment 5) | **Clean** (two real errors from earlier increments were found and fixed, see BF3) |
 | Client `vite build` | Not yet executed (sandbox cannot run Vite's Windows binaries). All client files parse and pass ESLint; import paths checked |

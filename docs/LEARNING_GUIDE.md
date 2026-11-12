@@ -128,3 +128,25 @@ Bugs section: no application bugs have been found yet because the database-backe
 **Lesson from BF1.** Every new model has `toJSON: { virtuals: true }` and tests assert `id` is present and `_id` absent. Populated users are loaded with `select: 'name role'`, so email never reaches the response.
 
 **Key code.** `models/Review.js`, `Conversation.js`, `Message.js`, `Report.js`; `services/reviewService.js`, `conversationService.js`, `reportService.js`; `pages/ReviewJobPage.jsx`, `MessagesPage.jsx`, `ConversationPage.jsx`, `components/ReportForm.jsx`; tests `completion`, `reviews`, `conversations`, `reports`.
+
+---
+
+## 8. The admin panel (Increment 6)
+
+**What we built.** An admin can see platform statistics, suspend and reactivate users, remove and restore jobs and reviews, work through reports, and manage categories. No new database collections were needed: the earlier increments already left the fields for it (`status`, `removedByAdmin`, report resolution fields, `isActive` on categories).
+
+**Why suspension is instant.** The login token holds only the user id (D8). `authenticate` loads the account from the database on every request, so setting `status = SUSPENDED` blocks the very next call. Nothing has to be "revoked".
+
+**Hiding without deleting.** Removing a job or a review only flips a flag. Public queries already filter on it (jobs since Increment 3; reviews since Increment 5), so the admin action needed no changes to them. The data stays, so a mistake can be undone.
+
+**Derived data again.** Removing a review calls `recalculateRatingSummary`, written in Increment 5 for exactly this. The rating is never edited by hand.
+
+**The report workflow.** `PENDING → REVIEWING → RESOLVED/DISMISSED`, with the allowed starting statuses held in one `ACTIONS` table in `adminReportService.js`. Status changes use `document.save()` so the Report model's hook keeps `isActive` right, which is what lets a reporter report the same target again after it is closed.
+
+**Protecting admins.** Suspend and reactivate refuse admin targets, so an admin can neither lock themselves out nor remove a colleague.
+
+**One pattern for every list.** Each list endpoint takes `page`/`limit` and returns `pagination`. On the client, `usePagedList` (filters + page), `useAction` (confirm, busy state, error) and `AdminListShell` (loading, error, empty, list, pagination) mean each admin page only describes its filters and one row.
+
+**Safe searching.** Search text becomes a regular expression, so `escapeRegex` makes sure typing `(` or `c++` is matched literally instead of throwing an error.
+
+**Key code.** `services/adminService.js`, `adminReportService.js`, `adminCategoryService.js`; `validators/adminValidators.js`; `routes/adminRoutes.js`; `client/src/pages/admin/*`, `components/admin/*`, `hooks/usePagedList.js`, `hooks/useAction.js`; tests `admin*.test.js`.

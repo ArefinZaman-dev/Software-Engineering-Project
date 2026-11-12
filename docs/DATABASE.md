@@ -1,7 +1,7 @@
 # Database design
 
 MongoDB with Mongoose. All collections are designed now so later increments do not force rewrites.
-**Status:** users, categories, jobs, applications (Increments 1-4) and reviews, conversations, messages, reports (Increment 5) are implemented.
+**Status:** all collections are implemented (Increments 1-6). Increment 6 added no new collections or fields: it uses the existing `status`, `removedByAdmin`, `isActive`, and report resolution fields.
 
 ```mermaid
 erDiagram

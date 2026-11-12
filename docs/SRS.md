@@ -32,7 +32,7 @@ Status shows the increment in which each requirement is delivered. "Built" means
 | FR-02 | A user can log in and out; sessions persist across page reloads | 2 | Built |
 | FR-03 | Passwords are stored only as hashes | 2 | Built |
 | FR-04 | Backend enforces role-based access; frontend routes are guarded for usability | 2 | Built |
-| FR-05 | A suspended user cannot log in and existing tokens are rejected | 2 | Built (suspension action arrives in Increment 6) |
+| FR-05 | A suspended user cannot log in and existing tokens are rejected | 2, 6 | Built (the suspend action is in the admin panel) |
 | FR-06 | Students maintain a profile (university, department, location, bio, skills, availability, experience) | 2 | Built |
 | FR-07 | Posters maintain a profile (name, organization details, description, location, website) | 2 | Built |
 | FR-08 | Each role has a dashboard; profiles show completeness and rating summary | 2 | Built |
@@ -43,8 +43,8 @@ Status shows the increment in which each requirement is delivered. "Built" means
 | FR-13 | Posters mark jobs complete or cancel them | 5 | Built (tests written, not yet run) |
 | FR-14 | The poster and accepted student review each other once after completion | 5 | Built (tests written, not yet run) |
 | FR-15 | Participants exchange messages within a conversation tied to a job | 5 | Built (tests written, not yet run) |
-| FR-16 | Users report jobs or users; admins review, resolve, or dismiss reports | 5-6 | Filing reports built (Increment 5); admin review in Increment 6 |
-| FR-17 | Admins view statistics, suspend/reactivate users, remove jobs, manage categories | 6 | Partly built (user counts) |
+| FR-16 | Users report jobs or users; admins review, resolve, or dismiss reports | 5-6 | Built (tests written, not yet run) |
+| FR-17 | Admins view statistics, suspend/reactivate users, remove jobs and reviews, manage categories | 6 | Built (tests written, not yet run) |
 
 ## 6. Non-functional requirements
 | ID | Requirement |
@@ -97,4 +97,19 @@ flowchart LR
   S --> UC13(Review the poster)
   P --> UC14(Report a job or user)
   S --> UC14
+```
+- As an admin, I want to suspend an account that breaks the rules and reactivate it later.
+- As an admin, I want to remove a harmful job or an unfair review, and restore it if I was wrong.
+- As an admin, I want to see open reports, act on them, and close them with a note.
+- As an admin, I want to add, rename, and deactivate job categories.
+
+## 11. Use cases (Increment 6)
+```mermaid
+flowchart LR
+  A([Admin]) --> UC20(View platform statistics)
+  A --> UC21(Suspend or reactivate a user)
+  A --> UC22(Remove or restore a job)
+  A --> UC23(Remove or restore a review)
+  A --> UC24(Review, resolve, or dismiss a report)
+  A --> UC25(Manage categories)
 ```

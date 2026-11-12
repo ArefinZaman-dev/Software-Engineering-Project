@@ -97,6 +97,9 @@ async function getOwnedJob(poster, id) {
 
 async function updateJob(poster, id, input) {
   const job = await getOwnedJob(poster, id);
+  if (job.removedByAdmin) {
+    throw new AppError('This job was removed by an admin and can no longer be edited.', 409);
+  }
   if (job.status !== JOB_STATUS.OPEN) {
     throw new AppError('Only an open job can be edited. Close or cancel instead.', 409);
   }

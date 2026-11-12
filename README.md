@@ -4,7 +4,7 @@
 
 CampusGig is a two-sided marketplace where university students find short-term jobs and micro-tasks, and individuals, businesses, and organizations find reliable student help. It is a Software Engineering Lab project (CSE 328, BUBT) by team **CodeConnect**, built with the Incremental Model over 16 Sep 2026 – 15 Dec 2026 (SOW #001).
 
-> **Project status: Increments 1–5 of 7 are built. Increments 1–4 are verified on the developer's own machine (117/117 tests, browser flows confirmed). Increment 5 (186 tests in total) is written, lint-clean and syntax-checked, but its tests have not been run against MongoDB yet.** See [PROGRESS.md](PROGRESS.md) for exact status.
+> **Project status: Increments 1–6 of 7 are built. Increments 1–5 are verified on the developer's own machine. Increment 6 (admin panel; 246 tests in total) is written, lint-clean and syntax-checked, but its tests have not been run against MongoDB yet.** See [PROGRESS.md](PROGRESS.md) for exact status.
 
 ## Problem statement
 
@@ -20,8 +20,8 @@ Students want flexible income that fits around classes, but finding safe, short-
 | Role-specific dashboards, admin dashboard with user counts | Built (Increment 2) |
 | Jobs: create, edit, delete, close, cancel, browse, search, filter, sort, pagination | Built (Increment 3) |
 | Applications, shortlist / accept / reject, withdraw, status rules | Built and verified (Increment 4) |
-| Mark job completed, two-way reviews with rating summary, basic (non-real-time) messaging, filing reports | Built (Increment 5, tests written, not yet run) |
-| Admin: user, job, category, report management | Increment 6 |
+| Mark job completed, two-way reviews with rating summary, basic messaging, filing reports | Built and verified (Increment 5) |
+| Admin panel: statistics, suspend/reactivate users, remove/restore jobs and reviews, resolve reports, manage categories | Built (Increment 6, tests written, not yet run) |
 | Full verification, final report, viva prep | Increment 7 |
 
 ## User roles
@@ -117,7 +117,7 @@ These are fake accounts with public passwords. Never use them or these passwords
 
 ## API overview
 
-Base path `/api`. Responses are `{ success, message?, data }` on success and `{ success:false, status, message, errors? }` on failure. Implemented so far: `/auth`, `/students/:id`, `/posters/:id`, `/admin/stats`, `/categories`, `/jobs` (including applications, `complete`, and `reviews`), `/applications`, `/reviews/user/:id`, `/conversations`, `/reports`, `/health`. Full details: [docs/API.md](docs/API.md).
+Base path `/api`. Responses are `{ success, message?, data }` on success and `{ success:false, status, message, errors? }` on failure. Implemented so far: `/auth`, `/students/:id`, `/posters/:id`, `/admin/stats`, `/categories`, `/jobs` (including applications, `complete`, and `reviews`), `/applications`, `/reviews/user/:id`, `/conversations`, `/reports`, `/admin` (stats, users, jobs, reviews, reports, categories), `/health`. Full details: [docs/API.md](docs/API.md).
 
 ## Testing
 
@@ -146,7 +146,7 @@ Online payments and escrow, real-time chat, identity verification and trust badg
 
 ## Known limitations (current state)
 
-- Messaging is not real-time (use Refresh); real-time chat is Version 2. Admins cannot yet review or resolve reports, remove reviews, or suspend users (Increment 6).
+- Messaging updates by checking every 5 seconds (not instant push); true real-time chat is Version 2. There is no appeal flow for suspended users, and suspension has no reason or expiry field; both are Version 2 ideas.
 - No profile photo upload (needs file storage; planned for Version 2). Initials are shown instead.
 - Email cannot be changed and there is no password reset or email verification yet.
 - The Increment 5 database tests have been written but not yet run (see PROGRESS.md).

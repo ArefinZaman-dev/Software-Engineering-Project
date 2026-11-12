@@ -29,7 +29,7 @@ npm run seed
 npm run dev
 ```
 Expected:
-- `npm test`: `# tests 186`, `# pass 186`, `# fail 0`.
+- `npm test`: `# tests 246`, `# pass 246`, `# fail 0`.
 - `npm run lint`: no output (no errors).
 - `npm run seed`: "Seed complete" followed by the demo accounts.
 - `npm run dev`: "CampusGig API running on http://localhost:5000". Opening http://localhost:5000/api/health shows `{"success":true,"data":{"status":"ok"}}`.
@@ -84,7 +84,7 @@ Expected: lint clean, build ends with "built in ...", and the app opens at http:
 Run `npm run seed` first (it now also clears applications, reviews, messages, and reports).
 31. As `sadia.rahman@campusgig.demo` (poster) open "Instagram Post Designs...". As `nusrat.jahan@campusgig.demo` (student) apply to it.
 32. As Sadia: Applicants, Shortlist Nusrat, click "Message Nusrat". The conversation page opens with "No messages yet". Send a message.
-33. As Nusrat: "Messages" shows the thread with "1 new". Open it (the badge disappears), reply, then as Sadia press Refresh and see the reply.
+33. As Nusrat: "Messages" shows the thread with "1 new". Open it (the badge disappears), reply, then as Sadia wait about 5 seconds: the reply appears without refreshing the page.
 34. As Sadia: Accept Nusrat. The job shows In progress; Applicants page and job page show "Mark as completed".
 35. Click "Mark as completed" and confirm: status becomes Completed; Nusrat's My applications shows Completed with "Review the poster".
 36. As Sadia open "Review the student", try Submit with no rating (message under the rating), then pick 5 stars and submit. Your review card replaces the form.
@@ -94,6 +94,20 @@ Run `npm run seed` first (it now also clears applications, reviews, messages, an
 40. As Tanvir (student) open any job and use "Report this job": choose a reason, send; the form is replaced by a thank-you. Reporting the same job again shows "already reported". Posters cannot see "Report this job" on their own job.
 41. Open another user's profile and use "Report this user" (not shown on your own profile).
 42. As admin, open `/messages` in the address bar: you are sent back to the admin dashboard.
+
+## 5e. Admin panel (Increment 6)
+Run `npm run seed`, then log in as `admin@campusgig.demo`.
+43. The dashboard shows grouped counts (People, Jobs, Activity). Open reports is highlighted when above zero.
+44. Users: search "nusrat", filter Role = Poster, filter Status. Suspend Tanvir (confirm): the badge turns Suspended. In another browser Tanvir is logged out on the next action, and logging in shows the suspended message. Reactivate him: login works again.
+45. Users: there is no Suspend button on admin rows.
+46. Suspend a poster (for example Rafiq): the Browse jobs page no longer lists his jobs. Reactivate: they return.
+47. Jobs: filter Visibility = Visible, search by title. Remove a job: it disappears from Browse jobs and its public link; as its poster it appears in My jobs marked Removed with an explanation and no link. Restore it: it returns.
+48. As a student, report a job (reason Spam). As admin open Reports: it shows under "Needs attention" with the reporter and reason. Press Start review (status becomes Under review), type a note, Resolve. Switch the filter to All reports: the note and "Closed ... by Admin" show.
+49. Reports: on a user report press "Suspend this user" and on a job report "Remove this job"; the report stays open until you resolve or dismiss it.
+50. As the same student, report the same job again after it was closed: it is accepted. Reporting it while still open says "already reported".
+51. Reviews: complete a job and review as in 31-37, then in Admin > Reviews remove that review. The person's rating on their profile drops back (4.0 from 1 review becomes no reviews). Restore it and the rating returns.
+52. Categories: add "Video Editing" (it appears when posting a job); rename it; deactivate it (gone from the post-a-job list, existing jobs still show); try adding the same name again (error); delete an unused category; the Delete button is missing for a category with jobs.
+53. As a student or poster, type `/admin` in the address bar: you are sent away. A student calling an admin API directly gets 403.
 
 ## 6. Send back
 Copy any red error text from the terminal or the browser console, and any step number that did not behave as described.

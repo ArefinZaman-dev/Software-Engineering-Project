@@ -11,6 +11,9 @@ import { getMessages, sendMessage } from '../services/messageService.js';
 import { MESSAGE_MAX_LENGTH, ROLES, formatDateTime } from '../utils/constants.js';
 import { getErrorMessage } from '../utils/errors.js';
 
+// How often an open thread quietly checks for new messages (not real-time; see DECISIONS D38).
+const POLL_INTERVAL_MS = 5000;
+
 export default function ConversationPage() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -18,8 +21,35 @@ export default function ConversationPage() {
   const [text, setText] = useState('');
   const [sendError, setSendError] = useState('');
   const [sending, setSending] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  // Newer copy of the thread fetched in the background (polling, Refresh, after sending).
+  // It is tagged with the conversation id so a stale copy is never shown for another thread.
+  const [live, setLive] = useState(null);
+  const view = live && live.id === id ? live.result : data;
   const endRef = useRef(null);
-  const messageCount = data?.messages.length ?? 0;
+  const messageCount = view?.messages.length ?? 0;
+  const canPoll = Boolean(view?.conversation.canSend);
+
+  async function refresh() {
+    const result = await getMessages(id);
+    setLive({ id, result });
+  }
+
+  // Quietly check for new messages while the thread is open and the tab is visible. A failed
+  // check is ignored: the thread on screen stays as it is and the next check tries again.
+  useEffect(() => {
+    if (!canPoll) return undefined;
+    const timer = setInterval(async () => {
+      if (document.hidden) return;
+      try {
+        const result = await getMessages(id);
+        setLive({ id, result });
+      } catch {
+        // keep showing the current thread
+      }
+    }, POLL_INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, [id, canPoll]);
 
   // Keep the newest message in view after the thread loads or a message is sent.
   useEffect(() => {
@@ -27,8 +57,8 @@ export default function ConversationPage() {
   }, [messageCount]);
 
   // Only show the full-page loader the first time; a refresh keeps the thread on screen.
-  if (loading && !data) return <PageLoader label="Loading conversation..." />;
-  if (error && !data) {
+  if (loading && !view) return <PageLoader label="Loading conversation..." />;
+  if (error && !view) {
     return (
       <ErrorState
         message={error.status === 404 ? 'This conversation does not exist or is no longer available.' : error.message}
@@ -37,7 +67,7 @@ export default function ConversationPage() {
     );
   }
 
-  const { conversation, messages } = data;
+  const { conversation, messages } = view;
   const counterpartPath =
     conversation.counterpart.role === ROLES.STUDENT
       ? `/students/${conversation.counterpart.id}`
@@ -60,11 +90,23 @@ export default function ConversationPage() {
     try {
       await sendMessage(id, body);
       setText('');
-      reload();
+      await refresh();
     } catch (err) {
       setSendError(getErrorMessage(err));
     } finally {
       setSending(false);
+    }
+  }
+
+  async function handleRefresh() {
+    setSendError('');
+    setRefreshing(true);
+    try {
+      await refresh();
+    } catch (err) {
+      setSendError(getErrorMessage(err));
+    } finally {
+      setRefreshing(false);
     }
   }
 
@@ -88,7 +130,7 @@ export default function ConversationPage() {
             </Link>
           </p>
         </div>
-        <Button variant="secondary" onClick={reload} loading={loading}>
+        <Button variant="secondary" onClick={handleRefresh} loading={refreshing}>
           Refresh
         </Button>
       </div>
@@ -128,7 +170,7 @@ export default function ConversationPage() {
             value={text}
             onChange={(event) => setText(event.target.value)}
             maxLength={MESSAGE_MAX_LENGTH}
-            hint="Messages are not live. Use Refresh to check for a reply."
+            hint="New messages appear within a few seconds. You can also press Refresh."
           />
           <Button type="submit" loading={sending}>
             Send

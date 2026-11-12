@@ -54,18 +54,32 @@ export default function MyJobsPage() {
             {data.jobs.map((job) => (
               <li key={job.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line bg-white p-4">
                 <div>
-                  <Link to={`/jobs/${job.id}`} className="font-display font-semibold hover:underline">
-                    {job.title}
-                  </Link>
+                  {job.removedByAdmin ? (
+                    // A removed job has no public page, so there is nothing to link to.
+                    <p className="font-display font-semibold">{job.title}</p>
+                  ) : (
+                    <Link to={`/jobs/${job.id}`} className="font-display font-semibold hover:underline">
+                      {job.title}
+                    </Link>
+                  )}
                   <p className="text-sm text-muted">
                     {job.category?.name} · {formatBudget(job.budget)}
                   </p>
+                  {job.removedByAdmin && (
+                    <p className="mt-1 text-sm text-danger">
+                      An admin removed this job from the platform. It is hidden from everyone else and can no longer be edited.
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-3">
                   <Link to={`/poster/jobs/${job.id}/applicants`} className="text-sm font-medium text-brand-700 underline">
                     Applicants
                   </Link>
-                  <StatusBadge status={job.status} />
+                  {job.removedByAdmin ? (
+                    <span className="inline-flex rounded-full bg-danger-soft px-2.5 py-1 text-xs font-medium text-danger">Removed</span>
+                  ) : (
+                    <StatusBadge status={job.status} />
+                  )}
                 </div>
               </li>
             ))}

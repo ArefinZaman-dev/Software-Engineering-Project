@@ -25,7 +25,7 @@ Some errors add `"code"` (for example `ACCOUNT_SUSPENDED`). Protected routes nee
 | 409 | Duplicate (for example email already registered) |
 | 413 / 429 / 500 | Body too large / too many requests / server error (generic message) |
 
-## Implemented endpoints (Increments 1-5)
+## Implemented endpoints (Increments 1-6)
 
 ### `GET /api/health`
 Public. `200 { success, data: { status: "ok" } }`.
@@ -54,7 +54,41 @@ Student only, own profile only. Body (all optional, at least one, unknown fields
 Poster only, own profile only. Body: `name`, `location`, `bio`, `organizationType` (`INDIVIDUAL`|`BUSINESS`|`ORGANIZATION`), `organizationName`, `website` (must start with http:// or https://). Same responses as above.
 
 ### `GET /api/admin/stats`
-Admin only. `200 { data: { stats: { totalUsers, students, posters } } }` · `401` · `403`.
+Admin only. `200 { data: { stats } }` with `totalUsers, students, posters, suspendedUsers, totalJobs, openJobs` (open and not removed), `inProgressJobs, completedJobs, removedJobs, totalApplications, totalReviews` (not removed), `openReports` (pending or under review). `401` · `403`.
+
+All `/api/admin/*` routes need a logged-in admin: `401` without a token, `403` for students and posters. List routes take `page` (default 1) and `limit` (default 20, max 100) and return `pagination { page, limit, total, totalPages }`. A malformed `:id` is `400`, an unknown one `404`.
+
+### `GET /api/admin/users`
+Query: `search` (name or email, case-insensitive, typed text is matched literally), `role`, `status`. Returns `{ users, pagination }`; each user: `id, name, email, role, status, location, ratingSummary, createdAt` (never the password hash).
+### `POST /api/admin/users/:id/suspend` and `/reactivate`
+`200 { data: { user } }`. Suspending blocks the person on their very next request and hides them from the platform. `400` the target is an admin (admins can never be suspended, including yourself) · `409` already suspended / not suspended.
+
+### `GET /api/admin/jobs`
+Query: `search` (title), `status`, `visibility` (`all` default, `visible`, `removed`). Each job: `id, title, status, budget, deadline, removedByAdmin, createdAt, poster {id,name,email}, category {id,name}`.
+### `POST /api/admin/jobs/:id/remove` and `/restore`
+Sets or clears `removedByAdmin`. A removed job vanishes from discovery, details, applying, and reporting; its poster still sees it in My jobs (marked removed) but cannot edit it. Nothing is deleted and applications are untouched. `409` already removed / not removed.
+
+### `GET /api/admin/reviews`
+Query: `visibility` (as above). Each review: `id, rating, comment, removedByAdmin, createdAt, reviewer {id,name}, reviewee {id,name}, job {id,title}`.
+### `POST /api/admin/reviews/:id/remove` and `/restore`
+Removing excludes the review from the profile list and recalculates the reviewee's rating summary immediately; restoring reverses it. The author still cannot write a replacement. `409` already removed / not removed.
+
+### `GET /api/admin/reports`
+Query: `status` (`OPEN` = pending + under review, or `PENDING`, `REVIEWING`, `RESOLVED`, `DISMISSED`; omit for all). Each report: `id, targetType, reason, description, status, resolutionNote, resolvedAt, resolvedBy, createdAt, reporter {id,name,email}, target {kind, id, label, ...}` (`label` is `(deleted job)` if the job no longer exists).
+### `POST /api/admin/reports/:id/review`
+`PENDING → REVIEWING`. `409` otherwise.
+### `POST /api/admin/reports/:id/resolve` and `/dismiss`
+Body: optional `note` (max 1000). From `PENDING` or `REVIEWING` to `RESOLVED` / `DISMISSED`; records who and when. `status` and `resolvedBy` in the body are ignored. `409` if already closed. Closing a report lets the same person report that target again.
+Acting on the job or user a report is about is a separate step (remove the job, suspend the user).
+
+### `GET /api/admin/categories`
+All categories, including inactive: `id, name, slug, isActive, jobCount`.
+### `POST /api/admin/categories`
+Body: `name` (2-60; must contain an English letter or digit, because the slug is built from it). `201`. `409` name or slug already used.
+### `PATCH /api/admin/categories/:id`
+Body: `name` and/or `isActive` (nothing else is accepted). Deactivating hides it from the public list and from new jobs; existing jobs keep working. `409` duplicate name.
+### `DELETE /api/admin/categories/:id`
+Only when no job uses it, otherwise `409` ("deactivate it instead").
 
 ### `GET /api/categories`
 Public. `200 { data: { categories: [{ id, name, slug }] } }`, active categories only, sorted by name.
@@ -139,5 +173,5 @@ Participants only. Body: `body` (1-2000 chars, trimmed). `201 { data: { message 
 Student or poster. Body: `targetType` (`JOB`|`USER`), `targetId`, `reason` (`SPAM`, `SCAM_OR_FRAUD`, `INAPPROPRIATE_CONTENT`, `HARASSMENT`, `FAKE_PROFILE`, `OTHER`), optional `description` (max 1000; at least 10 chars when the reason is `OTHER`). Status starts as `PENDING`; `status` and resolution fields in the body are ignored.
 `201 { data: { report } }` · `400` validation, own job, or yourself · `403` admin · `404` target missing, removed, suspended, or an admin · `409` you already have an active report on this target.
 
-## Planned endpoint groups
-`/api/users`, category admin routes, report management, and the rest of `/api/admin` (Increment 6). Messages live under `/api/conversations/:id/messages`; there is no separate `/api/messages`. This file is updated as each group is built.
+## Notes
+Messages live under `/api/conversations/:id/messages`; there is no separate `/api/messages`. There is no `/api/users` group: all user management is under `/api/admin/users`.

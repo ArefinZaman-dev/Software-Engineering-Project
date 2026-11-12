@@ -90,3 +90,26 @@ export function formatDateTime(value) {
 export function formatDay(value) {
   return new Date(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
+
+// ---- Admin panel (Increment 6) ----
+export const ROLE_LABELS = { STUDENT: 'Student', POSTER: 'Poster', ADMIN: 'Admin' };
+
+export const REPORT_STATUS_LABELS = {
+  PENDING: 'Pending',
+  REVIEWING: 'Under review',
+  RESOLVED: 'Resolved',
+  DISMISSED: 'Dismissed',
+};
+
+export const REPORT_STATUS_BADGE_STYLES = {
+  PENDING: 'bg-mark-soft text-ink',
+  REVIEWING: 'bg-brand-50 text-brand-700',
+  RESOLVED: 'bg-brand-50 text-brand-700',
+  DISMISSED: 'bg-line text-muted',
+};
+
+export const USER_STATUS_LABELS = { ACTIVE: 'Active', SUSPENDED: 'Suspended' };
+export const USER_STATUS_BADGE_STYLES = {
+  ACTIVE: 'bg-brand-50 text-brand-700',
+  SUSPENDED: 'bg-danger-soft text-danger',
+};

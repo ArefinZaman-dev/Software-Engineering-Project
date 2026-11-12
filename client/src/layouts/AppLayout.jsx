@@ -21,7 +21,14 @@ const NAV_ITEMS = {
     { to: '/messages', label: 'Messages' },
     { to: '/poster/profile', label: 'My profile' },
   ],
-  [ROLES.ADMIN]: [{ to: '/admin', label: 'Dashboard', end: true }],
+  [ROLES.ADMIN]: [
+    { to: '/admin', label: 'Dashboard', end: true },
+    { to: '/admin/users', label: 'Users' },
+    { to: '/admin/jobs', label: 'Jobs' },
+    { to: '/admin/reviews', label: 'Reviews' },
+    { to: '/admin/reports', label: 'Reports' },
+    { to: '/admin/categories', label: 'Categories' },
+  ],
 };
 
 const ROLE_LABELS = { STUDENT: 'Student', POSTER: 'Poster', ADMIN: 'Admin' };

@@ -36,7 +36,11 @@ describe('Role-based authorization', () => {
       const res = await api().get('/api/admin/stats').set(bearer(token));
 
       assert.equal(res.status, 200);
-      assert.deepEqual(res.body.data.stats, { totalUsers: 4, students: 2, posters: 1 });
+      // The user counts keep their original names; Increment 6 added more counts beside them
+      // (see adminStats.test.js).
+      assert.equal(res.body.data.stats.totalUsers, 4);
+      assert.equal(res.body.data.stats.students, 2);
+      assert.equal(res.body.data.stats.posters, 1);
     });
   });
 
