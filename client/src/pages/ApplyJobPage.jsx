@@ -4,6 +4,7 @@ import Alert from '../components/ui/Alert.jsx';
 import Button from '../components/ui/Button.jsx';
 import ErrorState from '../components/ui/ErrorState.jsx';
 import FormField from '../components/ui/FormField.jsx';
+import LearningResources from '../components/LearningResources.jsx';
 import PageLoader from '../components/ui/PageLoader.jsx';
 import useAsync from '../hooks/useAsync.js';
 import { applyToJob } from '../services/applicationService.js';
@@ -81,6 +82,8 @@ export default function ApplyJobPage() {
       <p className="mt-1 text-muted">
         Posted by {job.poster.name} · Budget ৳{job.budget.toLocaleString('en-US')}
       </p>
+
+      <LearningResources jobId={job.id} compact />
 
       <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4 rounded-lg border border-line bg-white p-6">
         {formError && <Alert>{formError}</Alert>}

@@ -1,10 +1,12 @@
 const express = require('express');
 const adminController = require('../controllers/adminController');
+const learningResourceController = require('../controllers/learningResourceController');
 const authenticate = require('../middleware/authenticate');
 const { authorizeRoles } = require('../middleware/authorize');
 const validate = require('../middleware/validate');
 const { idParamSchema } = require('../validators/common');
 const schemas = require('../validators/adminValidators');
+const { createResourceSchema, updateResourceSchema } = require('../validators/resourceValidators');
 const { ROLES } = require('../constants');
 
 const router = express.Router();
@@ -25,6 +27,12 @@ router.post('/users/:id/reactivate', withId, adminController.reactivateUser);
 router.get('/jobs', validate(schemas.listJobsQuerySchema, 'query'), adminController.listJobs);
 router.post('/jobs/:id/remove', withId, adminController.removeJob);
 router.post('/jobs/:id/restore', withId, adminController.restoreJob);
+
+// Learning resources (Increment 8): attached to one job; only an admin adds, edits, or removes them.
+router.get('/jobs/:id/resources', withId, learningResourceController.listForAdmin);
+router.post('/jobs/:id/resources', withId, validate(createResourceSchema), learningResourceController.create);
+router.patch('/resources/:id', withId, validate(updateResourceSchema), learningResourceController.update);
+router.delete('/resources/:id', withId, learningResourceController.remove);
 
 // Reviews
 router.get('/reviews', validate(schemas.listReviewsQuerySchema, 'query'), adminController.listReviews);

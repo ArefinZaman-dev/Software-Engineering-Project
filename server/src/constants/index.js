@@ -119,6 +119,22 @@ const REPORT_STATUS = Object.freeze({
 // reporter and target is allowed (partial unique index on Report).
 const REPORT_ACTIVE_STATUSES = Object.freeze([REPORT_STATUS.PENDING, REPORT_STATUS.REVIEWING]);
 
+// --- Increment 8: learning resources ---
+
+// What kind of help a resource is. NOTE is plain information typed by the admin (no link needed);
+// every other type points at something on the web, so it needs a link. See DECISIONS B16.
+const RESOURCE_TYPE = Object.freeze({
+  VIDEO: 'VIDEO',
+  ARTICLE: 'ARTICLE',
+  COURSE: 'COURSE',
+  DOCUMENT: 'DOCUMENT',
+  NOTE: 'NOTE',
+  OTHER: 'OTHER',
+});
+
+// Keeps one job page readable: more than this many resources is a course, not a quick start.
+const MAX_RESOURCES_PER_JOB = 20;
+
 const MESSAGE_MAX_LENGTH = 2000;
 const REVIEW_COMMENT_MAX_LENGTH = 1000;
 
@@ -140,6 +156,8 @@ module.exports = {
   REPORT_REASON,
   REPORT_STATUS,
   REPORT_ACTIVE_STATUSES,
+  RESOURCE_TYPE,
+  MAX_RESOURCES_PER_JOB,
   MESSAGE_MAX_LENGTH,
   REVIEW_COMMENT_MAX_LENGTH,
 };

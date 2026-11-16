@@ -38,6 +38,7 @@ describe('Admin: statistics', () => {
       totalApplications: 0,
       totalReviews: 0,
       openReports: 0,
+      learningResources: 0,
     });
   });
 

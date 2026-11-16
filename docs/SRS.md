@@ -45,6 +45,7 @@ Status shows the increment in which each requirement is delivered. "Built" means
 | FR-15 | Participants exchange messages within a conversation tied to a job | 5 | Built (tests written, not yet run) |
 | FR-16 | Users report jobs or users; admins review, resolve, or dismiss reports | 5-6 | Built (tests written, not yet run) |
 | FR-17 | Admins view statistics, suspend/reactivate users, remove jobs and reviews, manage categories | 6 | Built (tests written, not yet run) |
+| FR-18 | An admin attaches learning resources (video, article, course, document, or plain information) to a job; students and visitors see them on the job page and on the apply page, so a student who lacks a required skill can learn it before applying | 8 | Built (DB-free tests pass; database tests written, not yet run) |
 
 ## 6. Non-functional requirements
 | ID | Requirement |
@@ -113,3 +114,25 @@ flowchart LR
   A --> UC24(Review, resolve, or dismiss a report)
   A --> UC25(Manage categories)
 ```
+
+## 12. Use cases (Increment 8: learning resources)
+New requirement raised by the course teacher after Increment 7: a student who does not have the skills a job asks for should be able to learn them inside the app before applying.
+```mermaid
+flowchart LR
+  A([Admin]) --> UC26(Add, edit, or remove a learning resource for a job)
+  S([Student or visitor]) --> UC27(See learning resources on a job page)
+  S --> UC28(Open the learning resources from the apply page)
+  S --> UC29(Apply after learning the skill)
+```
+**Who adds the resources and why.** Only the admin. A poster knows the work but not necessarily the best way to learn it, and a student is the one who needs the help; letting either of them add links would let anyone put an unchecked link in front of students. Keeping it with the admin means every link is chosen and can be checked. See DECISIONS B16.
+
+**UC26 Add a learning resource.** Actor: Admin. Precondition: the job exists (it may be removed). Main flow: the admin opens Admin > Jobs, presses Learning resources on a job, fills in a title, a type, a link (or text for an information note), an optional skill label and description, and presses Add. Alternate flows: a link-type resource without a link, a link that is not http(s), or a 21st resource is rejected with a clear message. Postcondition: the resource appears on the job page for everyone who can see the job.
+**UC27 See learning resources.** Actor: Student, poster, or visitor (the job page is public). Main flow: the job page shows the section "Need to learn this skill first?" with one card per resource; a link opens in a new tab. If the job has no resources the section is not shown.
+**UC28 Learn before applying.** Actor: Student. The apply page shows a collapsed "Not sure you have the skills? See learning resources" box with the same cards, so the student does not need to leave the application.
+
+**User stories**
+- As a student, I want learning help on the job page so I can learn a missing skill and still apply with confidence.
+- As an admin, I want to attach good videos, articles, and short notes to a job and change or remove them later.
+- As a poster, I want students to arrive better prepared without me having to find tutorials myself.
+
+**Acceptance criteria (FR-18).** (1) Only an admin can add, edit, or remove a resource; posters and students get 403, visitors 401. (2) Anyone can read the resources of a job they can see; the resources of a removed job or a suspended poster's job are not shown. (3) A resource of any type except note needs a valid http(s) link; a note needs text. (4) A job has at most 20 resources. (5) Deleting a job deletes its resources.

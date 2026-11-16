@@ -1,7 +1,7 @@
 # Database design
 
 MongoDB with Mongoose. All collections are designed now so later increments do not force rewrites.
-**Status:** all collections are implemented (Increments 1-6). Increment 6 added no new collections or fields: it uses the existing `status`, `removedByAdmin`, `isActive`, and report resolution fields.
+**Status:** all collections are implemented (Increments 1-6, 8). Increment 6 added no new collections or fields. Increment 8 added one new collection, `learningresources`.
 
 ```mermaid
 erDiagram
@@ -14,6 +14,8 @@ erDiagram
   APPLICATION ||--o| CONVERSATION : "opens"
   CONVERSATION ||--o{ MESSAGE : contains
   USER ||--o{ REPORT : files
+  JOB ||--o{ LEARNING_RESOURCE : "has (max 20)"
+  USER ||--o{ LEARNING_RESOURCE : "admin adds"
 ```
 
 ## users (implemented)
@@ -56,6 +58,10 @@ Indexes: `{ status, createdAt }`, `{ category }`, `{ poster, createdAt }`, text 
 ## reports (implemented, Increment 5)
 `reporter`, `targetType` (`JOB`/`USER`), `targetJob` or `targetUser`, `reason` (fixed list), `description`, `status` (`PENDING`/`REVIEWING`/`RESOLVED`/`DISMISSED`), `resolvedBy`, `resolutionNote`, `resolvedAt`.
 A partial unique index (`isActive: true`) prevents two active reports by the same reporter against the same target. `isActive` is derived from `status` in a `pre('save')` hook, so Increment 6 must change report status with `document.save()`, not `updateOne`.
+
+## learningresources (implemented, Increment 8)
+`job` (ref Job, immutable), `title` (3-120), `type` (`VIDEO`/`ARTICLE`/`COURSE`/`DOCUMENT`/`NOTE`/`OTHER`), `url` (http(s) link, max 500, empty for a note), `description` (max 1000, required for a note), `skill` (optional label, max 40), `addedBy` (ref User, immutable, never sent to clients), `createdAt`, `updatedAt`.
+Index `{ job, createdAt }` for the per-job list. A `pre('validate')` hook enforces the type rule (link unless note, text for a note) even if something writes to the model without going through the API. Resources are deleted with their job.
 
 ## Duplicates are stopped twice
 Business rules are checked in services (friendly error messages), and unique indexes in MongoDB guarantee correctness even if two requests arrive at the same moment.

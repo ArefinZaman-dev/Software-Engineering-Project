@@ -25,7 +25,7 @@ Some errors add `"code"` (for example `ACCOUNT_SUSPENDED`). Protected routes nee
 | 409 | Duplicate (for example email already registered) |
 | 413 / 429 / 500 | Body too large / too many requests / server error (generic message) |
 
-## Implemented endpoints (Increments 1-6)
+## Implemented endpoints (Increments 1-6, 8)
 
 ### `GET /api/health`
 Public. `200 { success, data: { status: "ok" } }`.
@@ -172,6 +172,26 @@ Participants only. Body: `body` (1-2000 chars, trimmed). `201 { data: { message 
 ### `POST /api/reports`
 Student or poster. Body: `targetType` (`JOB`|`USER`), `targetId`, `reason` (`SPAM`, `SCAM_OR_FRAUD`, `INAPPROPRIATE_CONTENT`, `HARASSMENT`, `FAKE_PROFILE`, `OTHER`), optional `description` (max 1000; at least 10 chars when the reason is `OTHER`). Status starts as `PENDING`; `status` and resolution fields in the body are ignored.
 `201 { data: { report } }` · `400` validation, own job, or yourself · `403` admin · `404` target missing, removed, suspended, or an admin · `409` you already have an active report on this target.
+
+### `GET /api/jobs/:id/resources` (public, Increment 8)
+No login needed. The learning resources of a job, oldest first (the order the admin added them). Shown only where the job itself is shown: `404` for an unknown job, a job removed by an admin, or a job of a suspended poster; `400` for a malformed id.
+`200 { data: { resources: [ { id, job, title, type, url, description, skill, createdAt, updatedAt } ] } }` (empty array when there are none). `type` is `VIDEO`, `ARTICLE`, `COURSE`, `DOCUMENT`, `NOTE`, or `OTHER`; `url` is an empty string for a note. The admin who added it is never included.
+
+### `GET /api/admin/jobs/:id/resources`
+Admin only. `{ data: { job: { id, title }, resources } }`. Works for a removed job too. `404` unknown job · `403` · `401`.
+
+### `POST /api/admin/jobs/:id/resources`
+Admin only. Body: `title` (3-120), `type`, `url` (http(s), max 500; required unless `type` is `NOTE`), `description` (max 1000; required when `type` is `NOTE`), `skill` (optional label, max 40). The job comes from the URL; `job` and `addedBy` in the body are ignored. A job holds at most 20 resources.
+`201 { data: { resource } }` · `400` validation (for example `errors: [{ field: "url", message: "This type of resource needs a link." }]`) · `404` unknown job · `409` job already has 20 resources.
+
+### `PATCH /api/admin/resources/:id`
+Admin only. Any of `title`, `type`, `url`, `description`, `skill`; at least one is required. Unknown fields (such as `job`) are rejected with `400`, so a resource cannot be moved to another job. The type rule (link unless note, text for a note) is checked on the merged result, so changing a note to a video without a link is `400`.
+`200 { data: { resource } }` · `400` · `404`.
+
+### `DELETE /api/admin/resources/:id`
+Admin only. Removes the resource (hard delete: nothing else refers to it). `200` · `404`.
+
+Also in Increment 8: `GET /api/admin/stats` gains `learningResources` (total count), and each job in `GET /api/admin/jobs` gains `resourceCount`. Deleting a job (`DELETE /api/jobs/:id`) deletes its learning resources.
 
 ## Notes
 Messages live under `/api/conversations/:id/messages`; there is no separate `/api/messages`. There is no `/api/users` group: all user management is under `/api/admin/users`.

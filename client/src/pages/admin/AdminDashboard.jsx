@@ -24,6 +24,7 @@ const GROUPS = [
       { key: 'inProgressJobs', label: 'In progress' },
       { key: 'completedJobs', label: 'Completed' },
       { key: 'removedJobs', label: 'Removed by admin' },
+      { key: 'learningResources', label: 'Learning resources', to: '/admin/jobs' },
     ],
   },
   {

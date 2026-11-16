@@ -10,7 +10,7 @@ Run from `server/`: `npm test` (Node's built-in runner, files run one at a time 
 ## Safety
 Tests delete all data in `MONGODB_URI_TEST`. The config refuses to run unless that database name contains "test" and differs from `MONGODB_URI`.
 
-## Test inventory (246 tests)
+## Test inventory (290 tests: 246 before Increment 8, plus 44 new)
 
 | File | Tests | Covers |
 |---|---|---|
@@ -35,7 +35,10 @@ Tests delete all data in `MONGODB_URI_TEST`. The config refuses to run unless th
 | `adminReports.test.js` | 12 | Job and user report details, status filter, review/resolve/dismiss, closed reports locked, duplicate blocked while open and allowed after closing, deleted target, input ignored, role checks |
 | `adminCategories.test.js` | 14 | List with job counts, create (slug, duplicates, bad names), rename, deactivate (public list, new jobs, existing jobs), delete rules, role checks |
 
-Increment 7 is final verification, not new features.
+| `learningResourceRules.test.js` | 15 | **Needs no database.** Link rule (http/https only, rejects `javascript:`), create rules (link unless note, text for a note, trimming, length limits, unknown type, `job`/`addedBy` dropped), update rules (partial, empty, `job` rejected), model validation and JSON shape (`id` present, `_id` and `addedBy` hidden) |
+| `learningResources.test.js` | 29 | Public list (no login, order, only this job, 404 for removed job / suspended poster / unknown, 400 bad id), admin add (success, job from URL, note, validation, 20-per-job limit, removed job, 404, 403/401), admin list, update (partial, cannot move job, merged type rule, 404, 403), delete (404 second time, 403/401), job deletion removes resources, remove/restore keeps them, admin job list `resourceCount`, stats `learningResources` |
+
+Increment 7 is final verification. Increment 8 adds the learning-resources requirement requested after it.
 
 ## Real results so far
 
@@ -47,4 +50,7 @@ Increment 7 is final verification, not new features.
 | Increment 5 (69 tests) | Run by the developer: all passed (186 total at that point) |
 | Increment 6 (60 new tests, 246 total) | **Not yet executed against MongoDB** (the sandbox has no database). Written and syntax-checked |
 | ESLint, client and server (author's sandbox, after Increment 5) | **Clean** (two real errors from earlier increments were found and fixed, see BF3) |
+| Increment 8 (44 new tests, 290 total): ESLint client and server, `node --check` on every server file, routes registered | **Clean / passed** in the author's sandbox |
+| Increment 8: the 15 tests that need no database (`learningResourceRules.test.js`) | **15 passed, 0 failed** in the author's sandbox |
+| Increment 8: the 29 database tests (`learningResources.test.js`), seed, browser flow, `vite build` | **Not executed** (no MongoDB or Vite binaries in the sandbox). Run `npm test`; expect 290 |
 | Client `vite build` | Not yet executed (sandbox cannot run Vite's Windows binaries). All client files parse and pass ESLint; import paths checked |

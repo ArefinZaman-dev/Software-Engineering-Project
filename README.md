@@ -4,7 +4,7 @@
 
 CampusGig is a two-sided marketplace where university students find short-term jobs and micro-tasks, and individuals, businesses, and organizations find reliable student help. It is a Software Engineering Lab project (CSE 328, BUBT) by team **CodeConnect**, built with the Incremental Model over 16 Sep 2026 – 15 Dec 2026 (SOW #001).
 
-> **Project status: Increments 1–6 of 7 are built. Increments 1–5 are verified on the developer's own machine. Increment 6 (admin panel; 246 tests in total) is written, lint-clean and syntax-checked, but its tests have not been run against MongoDB yet.** See [PROGRESS.md](PROGRESS.md) for exact status.
+> **Project status: Increments 1–6 are built and verified on the developer's own machine (246/246 server tests passed after Increment 6). Increment 8 (learning resources, a new requirement from the course teacher) is built on top: 290 tests in total, lint-clean, its 15 database-free tests pass, but its 29 database tests and its browser checklist (steps 65–73) have not been run yet.** See [PROGRESS.md](PROGRESS.md) for exact status.
 
 ## Problem statement
 
@@ -23,6 +23,7 @@ Students want flexible income that fits around classes, but finding safe, short-
 | Mark job completed, two-way reviews with rating summary, basic messaging, filing reports | Built and verified (Increment 5) |
 | Admin panel: statistics, suspend/reactivate users, remove/restore jobs and reviews, resolve reports, manage categories | Built (Increment 6, tests written, not yet run) |
 | Full verification, final report, viva prep | Increment 7 |
+| Learning resources: an admin attaches videos, links, and notes to a job; students see them on the job page and the apply page and can learn a missing skill before applying | Built (Increment 8, database tests written, not yet run) |
 
 ## User roles
 
@@ -117,7 +118,7 @@ These are fake accounts with public passwords. Never use them or these passwords
 
 ## API overview
 
-Base path `/api`. Responses are `{ success, message?, data }` on success and `{ success:false, status, message, errors? }` on failure. Implemented so far: `/auth`, `/students/:id`, `/posters/:id`, `/admin/stats`, `/categories`, `/jobs` (including applications, `complete`, and `reviews`), `/applications`, `/reviews/user/:id`, `/conversations`, `/reports`, `/admin` (stats, users, jobs, reviews, reports, categories), `/health`. Full details: [docs/API.md](docs/API.md).
+Base path `/api`. Responses are `{ success, message?, data }` on success and `{ success:false, status, message, errors? }` on failure. Implemented so far: `/auth`, `/students/:id`, `/posters/:id`, `/admin/stats`, `/categories`, `/jobs` (including applications, `complete`, and `reviews`), `/applications`, `/reviews/user/:id`, `/conversations`, `/reports`, `/admin` (stats, users, jobs, reviews, reports, categories, job learning resources), `/jobs/:id/resources` (public), `/health`. Full details: [docs/API.md](docs/API.md).
 
 ## Testing
 

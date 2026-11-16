@@ -34,3 +34,9 @@ export const listAdminCategories = () => request('/admin/categories');
 export const createCategory = (name) => post('/admin/categories', { name });
 export const updateCategory = (id, values) => request(`/admin/categories/${id}`, { method: 'PATCH', body: values });
 export const deleteCategory = (id) => request(`/admin/categories/${id}`, { method: 'DELETE' });
+
+// Learning resources (Increment 8)
+export const listAdminJobResources = (jobId) => request(`/admin/jobs/${jobId}/resources`);
+export const createResource = (jobId, values) => post(`/admin/jobs/${jobId}/resources`, values);
+export const updateResource = (id, values) => request(`/admin/resources/${id}`, { method: 'PATCH', body: values });
+export const deleteResource = (id) => request(`/admin/resources/${id}`, { method: 'DELETE' });

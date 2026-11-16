@@ -114,6 +114,21 @@ As with Increment 5, Section 33 was not available, so these are choices made fro
 | D44 | Report status changes use `document.save()` | So the `pre('save')` hook keeps `isActive` correct (see Report model). |
 | D45 | Search text is escaped before use in a regex | `utils/escapeRegex.js`, so typing `c++` or `(` searches literally and cannot break or slow the query. |
 
+## Increment 8 additions (learning resources)
+| # | Question | Decision |
+|---|---|---|
+| B16 | Who adds learning resources? | Only an admin, against one job. Posters and students cannot. The poster knows the work but not necessarily good lessons, and open posting would let unchecked links reach students. This follows the developer's reading of the teacher's requirement; confirm with the teacher if she meant something different. |
+| B17 | One resource for one job, or shared across jobs? | One job. A resource belongs to exactly one job and cannot be moved (`PATCH` rejects `job`). Reusing a lesson on another job means adding it again. A shared library linked to many jobs or to a skill is a Version 2 idea. |
+| B18 | Who can see the resources? | Anyone who can see the job, logged in or not (the job page is public, as decided in Increment 3). A removed job or a suspended poster's job answers `404` for its resources too. |
+| B19 | Does removing or closing a job affect its resources? | Removing, restoring, closing, or cancelling a job keeps them. Deleting a job (only possible while it is open with no applications) deletes them, because nothing else refers to them. |
+| B20 | What is a NOTE? | A resource that is only text written by the admin (for example "you only need the basics"). It needs a description and no link. Every other type needs a link. |
+| B21 | Limit per job | 20, so a job page stays a quick start. Adding a 21st gives `409`. |
+| D46 | Only http and https links | A `javascript:` or `data:` link would run code or hide where a click leads. Checked by the request validator, the form, and the model. |
+| D47 | Links open in a new tab with `rel="noopener noreferrer"` | The student keeps the job page open and the other site cannot reach back into this one. |
+| D48 | Learning help never blocks the page | On the job page and apply page, if the resources fail to load or there are none, nothing is shown and the rest of the page works. |
+| D49 | Hard delete for resources | Unlike jobs and reviews, nothing refers to a resource, so a removed one is simply deleted (the admin confirms first). |
+| D50 | `/api/admin/stats` gains `learningResources`, admin job list gains `resourceCount` | `adminStats.test.js` now expects the extra key. |
+
 ## Bug fix log
 | # | Bug | Root cause | Fix |
 |---|---|---|---|

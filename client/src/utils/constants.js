@@ -113,3 +113,25 @@ export const USER_STATUS_BADGE_STYLES = {
   ACTIVE: 'bg-brand-50 text-brand-700',
   SUSPENDED: 'bg-danger-soft text-danger',
 };
+
+// ---- Learning resources (Increment 8) ----
+export const RESOURCE_TYPE_OPTIONS = [
+  { value: 'VIDEO', label: 'Video (YouTube or similar)' },
+  { value: 'ARTICLE', label: 'Article or tutorial' },
+  { value: 'COURSE', label: 'Course' },
+  { value: 'DOCUMENT', label: 'Document or PDF' },
+  { value: 'NOTE', label: 'Information (text only)' },
+  { value: 'OTHER', label: 'Other link' },
+];
+
+// Short badge text on a resource card.
+export const RESOURCE_TYPE_BADGES = {
+  VIDEO: 'Video',
+  ARTICLE: 'Article',
+  COURSE: 'Course',
+  DOCUMENT: 'Document',
+  NOTE: 'Info',
+  OTHER: 'Link',
+};
+
+export const MAX_RESOURCES_PER_JOB = 20;

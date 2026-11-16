@@ -10,7 +10,16 @@ const Review = require('../models/Review');
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
 const Report = require('../models/Report');
-const { ROLES, AVAILABILITY, ORGANIZATION_TYPES, DEFAULT_CATEGORIES, JOB_STATUS, WORK_TYPE } = require('../constants');
+const LearningResource = require('../models/LearningResource');
+const {
+  ROLES,
+  AVAILABILITY,
+  ORGANIZATION_TYPES,
+  DEFAULT_CATEGORIES,
+  JOB_STATUS,
+  WORK_TYPE,
+  RESOURCE_TYPE,
+} = require('../constants');
 
 // DEVELOPMENT / DEMO ONLY. These are fake accounts with a publicly documented password.
 const ADMIN_PASSWORD = 'Admin@12345';
@@ -110,6 +119,7 @@ async function seed() {
     Conversation.init(),
     Message.init(),
     Report.init(),
+    LearningResource.init(),
   ]);
   await Promise.all([
     User.deleteMany({}),
@@ -120,6 +130,7 @@ async function seed() {
     Conversation.deleteMany({}),
     Message.deleteMany({}),
     Report.deleteMany({}),
+    LearningResource.deleteMany({}),
   ]);
 
   const adminHash = await hashPassword(ADMIN_PASSWORD);
@@ -234,14 +245,70 @@ async function seed() {
     },
   ];
 
-  await Job.insertMany(jobs);
+  const createdJobs = await Job.insertMany(jobs);
+
+  // A few demo learning resources (Increment 8) so the "Need to learn this skill?" section and the
+  // admin screen have something to show. They point at well-known public sites; an admin replaces
+  // them with specific, checked lessons in real use.
+  const adminDoc = await User.findOne({ role: ROLES.ADMIN });
+  const jobByTitle = Object.fromEntries(createdJobs.map((job) => [job.title, job]));
+  const resources = [
+    {
+      job: jobByTitle['Landing Page for a Small Design Studio']._id,
+      title: 'HTML basics: Learn web development (MDN)',
+      type: RESOURCE_TYPE.ARTICLE,
+      url: 'https://developer.mozilla.org/en-US/docs/Learn_web_development',
+      description: 'Start here if you have never written HTML or CSS. Free, step by step.',
+      skill: 'HTML & CSS',
+    },
+    {
+      job: jobByTitle['Landing Page for a Small Design Studio']._id,
+      title: 'Quick Start: the official React tutorial',
+      type: RESOURCE_TYPE.COURSE,
+      url: 'https://react.dev/learn',
+      description: 'The official guide. Read Quick Start and Describing the UI first.',
+      skill: 'React',
+    },
+    {
+      job: jobByTitle['Landing Page for a Small Design Studio']._id,
+      title: 'freeCodeCamp.org on YouTube (full web development courses)',
+      type: RESOURCE_TYPE.VIDEO,
+      url: 'https://www.youtube.com/@freecodecamp',
+      description: 'Long, free video courses on HTML, CSS, and React.',
+      skill: 'React',
+    },
+    {
+      job: jobByTitle['Landing Page for a Small Design Studio']._id,
+      title: 'Before you apply',
+      type: RESOURCE_TYPE.NOTE,
+      description: 'You only need a clean one-page layout. If you can build a responsive page with a contact form, you are ready to apply.',
+      skill: '',
+    },
+    {
+      job: jobByTitle['Instagram Post Designs for a Spring Collection']._id,
+      title: 'Canva Design School',
+      type: RESOURCE_TYPE.COURSE,
+      url: 'https://www.canva.com/designschool/',
+      description: 'Free lessons on layouts, colors, and social media graphics.',
+      skill: 'Canva',
+    },
+    {
+      job: jobByTitle['Weekend Math Tutor for a Class 9 Student']._id,
+      title: 'Khan Academy: Algebra basics',
+      type: RESOURCE_TYPE.COURSE,
+      url: 'https://www.khanacademy.org/math/algebra-basics',
+      description: 'Revise the algebra topics a Class 9 student works on before your first session.',
+      skill: 'Math Tutoring',
+    },
+  ].map((resource) => ({ ...resource, addedBy: adminDoc._id }));
+  await LearningResource.insertMany(resources);
 
   logger.info('Seed complete. Demo accounts (development only):');
   logger.info(`  Admin            admin@campusgig.demo             ${ADMIN_PASSWORD}`);
   [...students, ...posters].forEach((u) =>
     logger.info(`  ${u.name.padEnd(16)} ${u.email.padEnd(32)} ${DEMO_PASSWORD}`)
   );
-  logger.info(`Seeded ${categories.length} categories and ${jobs.length} jobs.`);
+  logger.info(`Seeded ${categories.length} categories, ${jobs.length} jobs and ${resources.length} learning resources.`);
 }
 
 seed()

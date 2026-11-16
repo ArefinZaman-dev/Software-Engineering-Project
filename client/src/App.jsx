@@ -15,6 +15,7 @@ import RegisterPage from './pages/RegisterPage.jsx';
 import ReviewJobPage from './pages/ReviewJobPage.jsx';
 import AdminCategoriesPage from './pages/admin/AdminCategoriesPage.jsx';
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
+import AdminJobResourcesPage from './pages/admin/AdminJobResourcesPage.jsx';
 import AdminJobsPage from './pages/admin/AdminJobsPage.jsx';
 import AdminReportsPage from './pages/admin/AdminReportsPage.jsx';
 import AdminReviewsPage from './pages/admin/AdminReviewsPage.jsx';
@@ -90,6 +91,7 @@ export default function App() {
           <Route path="admin" element={<AdminDashboard />} />
           <Route path="admin/users" element={<AdminUsersPage />} />
           <Route path="admin/jobs" element={<AdminJobsPage />} />
+          <Route path="admin/jobs/:id/resources" element={<AdminJobResourcesPage />} />
           <Route path="admin/reviews" element={<AdminReviewsPage />} />
           <Route path="admin/reports" element={<AdminReportsPage />} />
           <Route path="admin/categories" element={<AdminCategoriesPage />} />

@@ -8,6 +8,7 @@ const { createJobSchema, updateJobSchema, listJobsQuerySchema } = require('../va
 const { applySchema } = require('../validators/applicationValidators');
 const applicationController = require('../controllers/applicationController');
 const reviewController = require('../controllers/reviewController');
+const learningResourceController = require('../controllers/learningResourceController');
 const { createReviewSchema } = require('../validators/reviewValidators');
 const { ROLES } = require('../constants');
 
@@ -20,6 +21,9 @@ router.get('/', validate(listJobsQuerySchema, 'query'), jobController.list);
 router.get('/mine', authenticate, authorizeRoles(ROLES.POSTER), jobController.mine);
 
 router.get('/:id', validate(idParamSchema, 'params'), jobController.getOne);
+
+// Public: learning help for this job (Increment 8). Shown wherever the job itself is shown.
+router.get('/:id/resources', validate(idParamSchema, 'params'), learningResourceController.listForJob);
 
 router.post('/', authenticate, authorizeRoles(ROLES.POSTER), validate(createJobSchema), jobController.create);
 

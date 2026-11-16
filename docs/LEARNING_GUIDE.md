@@ -150,3 +150,19 @@ Bugs section: no application bugs have been found yet because the database-backe
 **Safe searching.** Search text becomes a regular expression, so `escapeRegex` makes sure typing `(` or `c++` is matched literally instead of throwing an error.
 
 **Key code.** `services/adminService.js`, `adminReportService.js`, `adminCategoryService.js`; `validators/adminValidators.js`; `routes/adminRoutes.js`; `client/src/pages/admin/*`, `components/admin/*`, `hooks/usePagedList.js`, `hooks/useAction.js`; tests `admin*.test.js`.
+
+## 9. Learning resources (Increment 8)
+
+**The requirement.** The teacher asked for this after Increment 7: when a student does not have the skills a job needs, the app should help them learn it (videos, links, information) before they apply. The developer decided the admin adds these, per job, because posters and students should not be able to put unchecked links in front of other students (DECISIONS B16).
+
+**What was added.** One collection, `learningresources` (`models/LearningResource.js`), five endpoints (one public, four admin), one public section on the job page, one collapsed box on the apply page, and one admin screen per job.
+
+**Rules worth being able to explain.**
+- *Link or text.* Every type except NOTE needs a link; a NOTE needs text. The same rule is written three times on purpose: in the form (instant feedback), in the request validator (the real check), and in the model (so nothing can bypass it). The shared function `checkTypeRules` is also used on update, where the rule is checked on the *merged* result, otherwise changing a note to a video without a link would slip through.
+- *Safe links.* `isWebLink` accepts only `http:` and `https:`. A `javascript:` link would run code when clicked. Links open in a new tab with `rel="noopener noreferrer"`.
+- *Job from the URL, never from the body.* The job is taken from `/jobs/:id/resources`, and `job` and `addedBy` in the body are ignored; `PATCH` is strict and rejects `job`, so a resource cannot be moved. This is the same idea as the server choosing the reviewee in Increment 5.
+- *Public but hidden with the job.* Reading resources reuses `jobService.getPublicJob`, so a removed job or a suspended poster's job answers 404 exactly like the job page.
+- *Extra, never blocking.* If resources fail to load, the job and apply pages still work, because the component simply renders nothing.
+- *Cleanup.* Deleting a job deletes its resources (`deleteJob`), because they cannot exist without it.
+
+**Key code.** `server/src/models/LearningResource.js`, `validators/resourceValidators.js`, `services/learningResourceService.js`, `controllers/learningResourceController.js`, routes in `jobRoutes.js` and `adminRoutes.js`; client `components/LearningResources.jsx`, `components/admin/ResourceForm.jsx`, `pages/admin/AdminJobResourcesPage.jsx`; tests `learningResourceRules.test.js` (no database) and `learningResources.test.js`.

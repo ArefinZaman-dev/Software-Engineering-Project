@@ -3,6 +3,7 @@ const Job = require('../models/Job');
 const Application = require('../models/Application');
 const Review = require('../models/Review');
 const Report = require('../models/Report');
+const LearningResource = require('../models/LearningResource');
 const AppError = require('../utils/AppError');
 const escapeRegex = require('../utils/escapeRegex');
 const reviewService = require('./reviewService');
@@ -51,6 +52,7 @@ async function getStats() {
     totalApplications,
     totalReviews,
     openReports,
+    learningResources,
   ] = await Promise.all([
     User.countDocuments(),
     User.countDocuments({ role: ROLES.STUDENT }),
@@ -64,6 +66,7 @@ async function getStats() {
     Application.countDocuments(),
     Review.countDocuments({ removedByAdmin: false }),
     Report.countDocuments({ status: { $in: REPORT_ACTIVE_STATUSES } }),
+    LearningResource.countDocuments(),
   ]);
 
   return {
@@ -79,6 +82,7 @@ async function getStats() {
     totalApplications,
     totalReviews,
     openReports,
+    learningResources,
   };
 }
 
@@ -154,7 +158,17 @@ async function listJobs(query) {
       .populate('category', 'name'),
     Job.countDocuments(filter),
   ]);
-  return { jobs: jobs.map(toAdminJob), pagination: paginate(query, total) };
+  // How many learning resources each listed job has, in one query for the whole page.
+  const counts = await LearningResource.aggregate([
+    { $match: { job: { $in: jobs.map((job) => job._id) } } },
+    { $group: { _id: '$job', count: { $sum: 1 } } },
+  ]);
+  const countByJob = new Map(counts.map((entry) => [String(entry._id), entry.count]));
+
+  return {
+    jobs: jobs.map((job) => ({ ...toAdminJob(job), resourceCount: countByJob.get(String(job._id)) || 0 })),
+    pagination: paginate(query, total),
+  };
 }
 
 // Removing hides the job from discovery, details, and reports (DECISIONS B1). Its applications,

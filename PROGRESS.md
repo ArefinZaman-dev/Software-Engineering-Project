@@ -1,8 +1,34 @@
 # PROGRESS
 
-Last updated: 12 Oct 2026
+Last updated: 16 Nov 2026
 
-## Current state: Increments 1-5 complete; the developer reports Increment 5 runs properly (the full `npm test` count was not shown to the author). Increment 6 (admin panel) is written, lint-clean, and syntax-checked but NOT yet run against MongoDB. Next: run `npm test` (expect 246) and checklist items 43-53, then Increment 7 (final verification, report, viva preparation).
+## Current state: Increments 1-6 verified by the developer (246/246 server tests, browser checks done). Increment 8 (learning resources) is written on top of Increment 6; its 15 database-free tests pass and ESLint is clean, but its 29 database tests, the seed, and the browser checklist (65-73) are NOT yet run. Next: run `npm test` (expect 290), `npm run seed`, and checklist 65-73.
+
+## Increment 8 - Learning resources (new requirement from the teacher; written, database tests NOT yet run)
+
+**Requirement.** A student who lacks the skills a job needs can learn them inside the app before applying: videos, links, and information attached to the job. The admin adds them (DECISIONS B16).
+
+**Completed**
+- `LearningResource` model (job, title, type, url, description, skill, addedBy); type rule (link unless note, text for a note) enforced in the form, the request validator, and the model.
+- Public `GET /api/jobs/:id/resources` (hidden with the job: removed job or suspended poster gives 404). Admin `GET/POST /api/admin/jobs/:id/resources`, `PATCH/DELETE /api/admin/resources/:id`. Limit 20 per job. Only http/https links.
+- Deleting a job deletes its resources. Admin stats gain `learningResources`; the admin job list gains `resourceCount`.
+- Client: section "Need to learn this skill first?" on the job page, a collapsed box on the apply page, an admin screen per job (add, edit, remove), a Learning resources button on each row of Admin > Jobs, a dashboard count.
+- Seed adds six demo resources (they point at well-known public sites; an admin replaces them with checked lessons).
+- 44 new tests (290 total): 15 need no database, 29 need MongoDB. Docs updated: SRS (FR-18, UC26-29), API, DATABASE, DECISIONS (B16-B21, D46-D50), TESTING, MANUAL_VERIFICATION (65-73), README, LEARNING_GUIDE (section 9).
+- One earlier test changed: `adminStats.test.js` now expects the extra `learningResources` key.
+
+**Verification actually done (author's sandbox)**
+| Check | Result |
+|---|---|
+| ESLint, client and server | Clean |
+| `node --check` on all server files and tests | Passed |
+| All five new routes registered in the app | Confirmed |
+| 15 database-free tests (`learningResourceRules.test.js`) | **15 passed** |
+| 29 database tests, seed, browser flow, `vite build` | **NOT run** (no MongoDB or Vite binaries in the sandbox) |
+
+**Assumptions to confirm with the teacher:** B16 (admin adds them), B17 (one resource belongs to one job; no shared library), B21 (20 per job).
+
+**Not in this increment (by plan):** resources shared across jobs or attached to a skill, student progress or "mark as learned", ratings of resources, poster suggestions that an admin approves (ideas for Version 2).
 
 ## Increment 6 - Admin panel (written, NOT yet run against MongoDB)
 

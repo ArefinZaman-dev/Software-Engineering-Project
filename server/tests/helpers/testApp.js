@@ -14,6 +14,7 @@ const Review = require('../../src/models/Review');
 const Conversation = require('../../src/models/Conversation');
 const Message = require('../../src/models/Message');
 const Report = require('../../src/models/Report');
+const LearningResource = require('../../src/models/LearningResource');
 const { hashPassword } = require('../../src/utils/password');
 const { signToken } = require('../../src/utils/token');
 const { JOB_STATUS, WORK_TYPE } = require('../../src/constants');
@@ -31,6 +32,7 @@ async function setupDatabase() {
   await Conversation.init(); // unique (application)
   await Message.init();
   await Report.init(); // partial unique index on active reports
+  await LearningResource.init();
 }
 
 async function clearDatabase() {
@@ -136,6 +138,23 @@ async function createHire({ jobStatus = 'IN_PROGRESS', applicationStatus = 'ACCE
   };
 }
 
+// Creates a learning resource directly in the database (bypassing the API). `overrides.job` and
+// `overrides.addedBy` should be ids; a job and an admin are created when they are not given.
+async function createResource(overrides = {}) {
+  counter += 1;
+  const job = overrides.job || (await createJob())._id;
+  const addedBy = overrides.addedBy || (await createUser({ role: 'ADMIN' })).user._id;
+
+  return LearningResource.create({
+    title: `Learning resource ${counter}`,
+    type: 'ARTICLE',
+    url: 'https://example.com/learn',
+    ...overrides,
+    job,
+    addedBy,
+  });
+}
+
 const api = () => request(app);
 const bearer = (token) => ({ Authorization: `Bearer ${token}` });
 
@@ -147,6 +166,7 @@ module.exports = {
   createJob,
   createApplication,
   createHire,
+  createResource,
   daysFromNow,
   setupDatabase,
   clearDatabase,

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Alert from '../components/ui/Alert.jsx';
 import Button, { buttonClasses } from '../components/ui/Button.jsx';
 import ErrorState from '../components/ui/ErrorState.jsx';
+import LearningResources from '../components/LearningResources.jsx';
 import ReportForm from '../components/ReportForm.jsx';
 import PageLoader from '../components/ui/PageLoader.jsx';
 import StatusBadge from '../components/ui/StatusBadge.jsx';
@@ -122,6 +123,8 @@ export default function JobDetailsPage() {
             </ul>
           </section>
         )}
+
+        <LearningResources jobId={job.id} />
 
         <section className="mt-6 border-t border-line pt-4" aria-labelledby="poster-heading">
           <h2 id="poster-heading" className="sr-only">

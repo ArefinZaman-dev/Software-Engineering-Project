@@ -109,5 +109,17 @@ Run `npm run seed`, then log in as `admin@campusgig.demo`.
 52. Categories: add "Video Editing" (it appears when posting a job); rename it; deactivate it (gone from the post-a-job list, existing jobs still show); try adding the same name again (error); delete an unused category; the Delete button is missing for a category with jobs.
 53. As a student or poster, type `/admin` in the address bar: you are sent away. A student calling an admin API directly gets 403.
 
+## 5f. Learning resources (Increment 8)
+These steps are numbered 65 onwards so they follow the Increment 7 final checklist (54-64). Run `npm run seed` again first (the seed now adds six demo resources), then start the server and client.
+65. Log in as `admin@campusgig.demo`. Dashboard > Jobs group shows a Learning resources count of 6.
+66. Admin > Jobs: each job shows a Learning resources (n) button. "Landing Page for a Small Design Studio" shows 4, the Instagram job 1, the tutor job 1, the others 0.
+67. Open Learning resources on the landing-page job: four cards (three links and one information note). Add a resource: title "CSS Flexbox in 10 minutes", type Video, link `https://www.youtube.com/`, skill "CSS". It appears at the end of the list. Try to add a Video with no link: the form shows "This type of resource needs a link." Try the link `javascript:alert(1)`: rejected. Choose type Information with no text: rejected; with text and no link: accepted.
+68. Edit the resource you added (change the title): saved. Change its type to Information without writing any text: rejected (a note needs text); write some text and save: allowed. Edit a Video and clear its link: rejected. Remove the resource (confirm): it disappears.
+69. Log out. Open that job from Browse jobs (no login): the section "Need to learn this skill first?" shows the cards. A link opens in a new tab. A job with no resources (for example the furniture job) shows no such section.
+70. Log in as Tanvir (student), open the landing-page job and press Apply: a collapsed box "Not sure you have the skills? See learning resources (4)" appears above the form; open it, then submit an application as normal.
+71. Log in as Rafiq or Sadia (poster): there is no way to add a resource; typing `/admin/jobs` in the address bar sends you away. A student or poster calling `POST /api/admin/jobs/:id/resources` directly gets 403.
+72. As admin remove the landing-page job (Admin > Jobs > Remove): its public link and its resources disappear for visitors; in Admin > Jobs > Learning resources you can still see them. Restore the job: they return.
+73. As Sadia (poster) delete a job that has resources and no applications: it is deleted. Log in as admin: the Learning resources count on the dashboard dropped by that job's resources.
+
 ## 6. Send back
 Copy any red error text from the terminal or the browser console, and any step number that did not behave as described.

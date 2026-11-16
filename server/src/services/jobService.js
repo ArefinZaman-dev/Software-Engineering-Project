@@ -2,6 +2,7 @@ const Job = require('../models/Job');
 const User = require('../models/User');
 const Category = require('../models/Category');
 const Application = require('../models/Application');
+const LearningResource = require('../models/LearningResource');
 const AppError = require('../utils/AppError');
 const { JOB_STATUS, USER_STATUS, JOB_SORT_OPTIONS, WITHDRAWN_BY, APPLICATION_STATUS } = require('../constants');
 
@@ -120,6 +121,8 @@ async function deleteJob(poster, id) {
     throw new AppError('This job has applications and cannot be deleted. Close or cancel it instead.', 409);
   }
   await job.deleteOne();
+  // The learning resources belonged to this job alone, so they go with it (Increment 8).
+  await LearningResource.deleteMany({ job: job._id });
 }
 
 async function closeJob(poster, id) {

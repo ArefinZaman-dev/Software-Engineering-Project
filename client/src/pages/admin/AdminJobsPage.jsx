@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import AdminListShell from '../../components/admin/AdminListShell.jsx';
 import SearchBox from '../../components/admin/SearchBox.jsx';
 import SelectFilter from '../../components/admin/SelectFilter.jsx';
-import Button from '../../components/ui/Button.jsx';
+import Button, { buttonClasses } from '../../components/ui/Button.jsx';
 import StatusBadge from '../../components/ui/StatusBadge.jsx';
 import useAction from '../../hooks/useAction.js';
 import usePagedList from '../../hooks/usePagedList.js';
@@ -62,6 +62,9 @@ export default function AdminJobsPage() {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <StatusBadge status={job.status} />
+            <Link to={`/admin/jobs/${job.id}/resources`} className={buttonClasses({ variant: 'secondary' })}>
+              Learning resources ({job.resourceCount})
+            </Link>
             {job.removedByAdmin && (
               <span className="inline-flex rounded-full bg-danger-soft px-2.5 py-1 text-xs font-medium text-danger">Removed</span>
             )}
