@@ -9,7 +9,7 @@ import PageLoader from '../components/ui/PageLoader.jsx';
 import useAsync from '../hooks/useAsync.js';
 import { applyToJob } from '../services/applicationService.js';
 import { getJob } from '../services/jobService.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { getErrorMessage, getFieldErrors } from '../utils/errors.js';
 
 function validate(values) {
   const errors = {};
@@ -54,6 +54,7 @@ export default function ApplyJobPage() {
       navigate('/student/applications', { replace: true });
     } catch (err) {
       setFormError(getErrorMessage(err));
+      setErrors(getFieldErrors(err));
       setSubmitting(false);
     }
   }

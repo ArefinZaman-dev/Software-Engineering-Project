@@ -25,7 +25,7 @@ const skills = z
 const budget = z
   .number({ required_error: 'Budget is required.', invalid_type_error: 'Budget must be a number.' })
   .positive('Budget must be greater than 0.')
-  .max(10_000_000, 'Budget is too large.');
+  .max(10_000_000, 'Budget cannot be more than 10,000,000.');
 
 // Accepts an ISO date string from the browser's <input type="date">/<input type="datetime-local">.
 const futureDeadline = z

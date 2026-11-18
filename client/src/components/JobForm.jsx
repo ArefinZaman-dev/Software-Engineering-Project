@@ -6,6 +6,10 @@ import SkillsInput from './ui/SkillsInput.jsx';
 import useAsync from '../hooks/useAsync.js';
 import { listCategories } from '../services/categoryService.js';
 import { WORK_TYPE_OPTIONS } from '../utils/constants.js';
+import { getFieldErrors } from '../utils/errors.js';
+
+// Must match the server (jobValidators.js and the Job model).
+const MAX_BUDGET = 10_000_000;
 
 const EMPTY_VALUES = {
   title: '',
@@ -50,6 +54,7 @@ function validate(values) {
   if (!values.category) errors.category = 'Choose a category.';
   const budgetNumber = Number(values.budget);
   if (!values.budget || Number.isNaN(budgetNumber) || budgetNumber <= 0) errors.budget = 'Enter a budget greater than 0.';
+  else if (budgetNumber > MAX_BUDGET) errors.budget = 'Budget cannot be more than ৳10,000,000 (1 crore).';
   if (!values.duration.trim()) errors.duration = 'Duration is required.';
   if (!values.location.trim()) errors.location = 'Location is required.';
   if (!values.deadline) errors.deadline = 'Deadline is required.';
@@ -99,6 +104,9 @@ export default function JobForm({ initialValues, submitLabel, onSubmit, formErro
         workType: values.workType,
         deadline: toDeadlineISOString(values.deadline),
       });
+    } catch (error) {
+      // The page shows the general message; here each server message goes under its own field.
+      setErrors(getFieldErrors(error));
     } finally {
       setSubmitting(false);
     }
