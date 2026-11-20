@@ -36,12 +36,12 @@ Virtual `profileCompletion` (percentage + missing items) is included in the owne
 **Why embedded profiles:** see DECISIONS D15.
 
 ## categories (implemented, Increment 3)
-`name` (unique), `slug` (unique), `isActive`. A category with jobs is deactivated, never deleted (deactivation itself is an admin action, planned for Increment 6; the field and the rule already exist).
+`name` (unique), `slug` (unique), `isActive`. A category with jobs is deactivated, never deleted (deactivation is an admin action, built in Increment 6).
 
 ## jobs (implemented, Increment 3)
 `poster` (ref User, immutable), `title`, `description`, `category` (ref), `skills[]`, `budget`, `duration`, `location`, `workType` (`REMOTE`/`ON_SITE`/`HYBRID`), `deadline`, `status` (`OPEN`/`CLOSED`/`IN_PROGRESS`/`COMPLETED`/`CANCELLED`), `acceptedApplication` (ref, set in Increment 4), `removedByAdmin` (Boolean, used from Increment 6).
 Indexes: `{ status, createdAt }`, `{ category }`, `{ poster, createdAt }`, text index on `title` and `description`.
-`IN_PROGRESS` and `COMPLETED` are not reachable yet (they require the application accept/complete flow, Increments 4-5); `OPEN`, `CLOSED`, and `CANCELLED` are fully working now.
+All five job statuses are in use: `IN_PROGRESS` is set when an application is accepted (Increment 4) and `COMPLETED` when the poster completes the job (Increment 5).
 
 ## applications (implemented, Increment 4)
 `job`, `student` (both immutable), `coverMessage` (10-1000), `proposedAmount` (optional), `status` (`PENDING`, `SHORTLISTED`, `ACCEPTED`, `REJECTED`, `WITHDRAWN`, `COMPLETED`), `withdrawnBy` (`STUDENT` or `POSTER_CANCELLED`, only when withdrawn). `COMPLETED` is set in Increment 5.

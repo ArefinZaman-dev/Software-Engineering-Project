@@ -1,10 +1,19 @@
 # PROGRESS
 
-Last updated: 16 Nov 2026
+Last updated: 20 Nov 2026
 
-## Current state: Increments 1-6 verified by the developer (246/246 server tests, browser checks done). Increment 8 (learning resources) is written on top of Increment 6; its 15 database-free tests pass and ESLint is clean, but its 29 database tests, the seed, and the browser checklist (65-73) are NOT yet run. Next: run `npm test` (expect 290), `npm run seed`, and checklist 65-73.
+## Current state: all eight increments are built. Increments 1-6 and 8 have their server tests run by the developer (290/290 passed on 16 Nov 2026, real MongoDB). Increment 7 (final documentation) is complete: `docs/FINAL_REPORT.md`, `docs/VIVA_PREP.md`, and final checklist 54-64. Still for the developer to tick before submission: the final browser pass (checklist 54-73, including the learning-resource steps 65-73), `npm run lint` in both folders, and a fresh `npm run build` in `client`.
 
-## Increment 8 - Learning resources (new requirement from the teacher; written, database tests NOT yet run)
+## Increment 7 - Final documentation and verification (complete)
+
+**Completed**
+- `docs/FINAL_REPORT.md` (scope, coverage, size, verification, bugs, limitations, future scope) and `docs/VIVA_PREP.md` (questions and answers for every part of the system, including Increment 8, plus a demo order).
+- Final end-to-end checklist 54-64 in `docs/MANUAL_VERIFICATION.md` (Increment 8 steps are 65-73).
+- Status lines in README, SRS, TESTING and DATABASE brought in line with what was actually run; DECISIONS D25 updated (the delete-with-applications rule exists since Increment 4).
+- A later small change: the budget error message now reads "Budget cannot be more than 10,000,000." and the job form shows field errors.
+- These documents were rebuilt on 20 Nov 2026 because the first copies of the Increment 7 files were lost when Increment 8 replaced the project folder.
+
+## Increment 8 - Learning resources (new requirement from the teacher; server tests 290/290 passed)
 
 **Requirement.** A student who lacks the skills a job needs can learn them inside the app before applying: videos, links, and information attached to the job. The admin adds them (DECISIONS B16).
 
@@ -24,13 +33,14 @@ Last updated: 16 Nov 2026
 | `node --check` on all server files and tests | Passed |
 | All five new routes registered in the app | Confirmed |
 | 15 database-free tests (`learningResourceRules.test.js`) | **15 passed** |
-| 29 database tests, seed, browser flow, `vite build` | **NOT run** (no MongoDB or Vite binaries in the sandbox) |
+| 29 database tests (developer's machine, 16 Nov 2026) | **All 290 tests passed, 0 failed** |
+| Seed, browser checklist 65-73, `vite build` | **Not recorded as done**: the developer should tick them |
 
 **Assumptions to confirm with the teacher:** B16 (admin adds them), B17 (one resource belongs to one job; no shared library), B21 (20 per job).
 
 **Not in this increment (by plan):** resources shared across jobs or attached to a skill, student progress or "mark as learned", ratings of resources, poster suggestions that an admin approves (ideas for Version 2).
 
-## Increment 6 - Admin panel (written, NOT yet run against MongoDB)
+## Increment 6 - Admin panel (verified: 246/246 tests, browser checks done)
 
 **Completed**
 - `/api/admin/*` (admin only): richer statistics; users (search, filters, pagination, suspend, reactivate); jobs (remove, restore); reviews (remove, restore, rating recalculated both ways); reports (list, start review, resolve, dismiss with a note); categories (list with job counts, create, rename, deactivate, delete only when unused).
@@ -46,7 +56,8 @@ Last updated: 16 Nov 2026
 | ESLint, client and server | Clean |
 | `node --check` on all server files and tests | Passed |
 | App loads; all 18 admin routes registered | Confirmed |
-| 60 new database tests, browser flow, `vite build` | **NOT run** (no MongoDB or Vite binaries in the sandbox) |
+| 60 new database tests | **Run by the developer: 246/246 passed** (author's sandbox had no MongoDB) |
+| Browser flow (job remove/restore, removed-review notice) | **Confirmed by the developer** |
 
 **Assumptions to confirm** (Section 33 was not available): B10-B15 in DECISIONS.md.
 
@@ -72,7 +83,7 @@ Last updated: 16 Nov 2026
 | Model validation and JSON shape without a database (rating, body, reason, `id` present, `_id` absent) | Passed |
 | Report `isActive` save hook (real `save()` path, collection stubbed) | Passed |
 | 7 DB-free tests | 7 passed |
-| 69 new database tests, seed, browser flow, `vite build` | **NOT run** (no MongoDB or Vite binaries in the sandbox) |
+| 69 new database tests, browser flow | **Run by the developer: passed, browser flow confirmed** (author's sandbox had no MongoDB or Vite) |
 
 **Assumptions to confirm** (Section 33 was not in the ZIP): B7 messaging only for shortlisted/accepted applications; B8 only the poster completes a job; B9 removed reviews cannot be replaced. See DECISIONS.md.
 
@@ -114,9 +125,9 @@ Verified end-to-end on the developer's own machine (Windows, MongoDB installed l
 | Browser: register, login/logout, session persistence | Confirmed working by the developer |
 | Browser: student dashboard for an incomplete profile (Farhana) | Confirmed: 50% complete, missing items listed correctly (location, bio, experience) - screenshot matched expectations exactly |
 | Browser: admin dashboard | Confirmed: total users 7, students 3, posters 3 - screenshot matched expectations exactly |
-| Client production build (`vite build`) | Not yet run (dev server only so far) |
-| ESLint (client and server) | Not yet run |
-| Full manual checklist in MANUAL_VERIFICATION.md (all 12 items) | Partially done; the rest can be checked anytime |
+| Client production build (`vite build`) | Not run at this stage (dev server only) |
+| ESLint (client and server) | Not run at this stage; clean from Increment 5 on |
+| Full manual checklist in MANUAL_VERIFICATION.md (items 1-12) | Partially done at this stage; the final pass is items 54-64 |
 
 ## Problems found and fixed
 
@@ -155,7 +166,7 @@ Verified end-to-end on the developer's own machine (Windows, MongoDB installed l
 | Seed script with categories and jobs | **Verified: 10 categories, 6 jobs seeded correctly** |
 | Browser check of Browse Jobs / Job Details / My Jobs / Create / Edit | **Verified by the developer: job creation, category selection, and job-details navigation all confirmed working** |
 
-## Increment 4 - Applications and candidate selection (written, NOT yet run)
+## Increment 4 - Applications and candidate selection (verified: 117/117 tests, browser flow confirmed)
 
 **Completed**
 - `Application` model with unique `(job, student)` index; constants for application status and withdrawn reason.
@@ -165,7 +176,7 @@ Verified end-to-end on the developer's own machine (Windows, MongoDB installed l
 - Client: Apply page, My applications (with withdraw), poster Applicants page (shortlist/accept/reject), Apply and View applicants links, nav link, routes.
 - 34 new server tests (117 total).
 
-**Verification:** syntax checks passed for all server and client files; the 7 dependency-free tests re-ran and passed. The 34 new tests, seed, and browser flow have NOT been run. Checklist items 23-30 in docs/MANUAL_VERIFICATION.md.
+**Verification:** syntax checks passed for all server and client files. The developer ran the tests: 117 passed, 0 failed. The browser flow (apply, applicants, shortlist, accept, withdraw) was confirmed, and a seed bug found there was fixed (the seed now looks posters up by email and clears applications). Checklist items 23-30 in docs/MANUAL_VERIFICATION.md.
 
 **Not in this increment (by plan):** marking a job completed, reviews, messaging, reports (Increment 5).
 

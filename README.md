@@ -4,7 +4,7 @@
 
 CampusGig is a two-sided marketplace where university students find short-term jobs and micro-tasks, and individuals, businesses, and organizations find reliable student help. It is a Software Engineering Lab project (CSE 328, BUBT) by team **CodeConnect**, built with the Incremental Model over 16 Sep 2026 – 15 Dec 2026 (SOW #001).
 
-> **Project status: Increments 1–6 are built and verified on the developer's own machine (246/246 server tests passed after Increment 6). Increment 8 (learning resources, a new requirement from the course teacher) is built on top: 290 tests in total, lint-clean, its 15 database-free tests pass, but its 29 database tests and its browser checklist (steps 65–73) have not been run yet.** See [PROGRESS.md](PROGRESS.md) for exact status.
+> **Project status: all eight increments are built. The server test suite (290 tests, including the learning-resources requirement added by the course teacher as Increment 8) passed on the developer's own machine against a real MongoDB. The final documents are in `docs/` (FINAL_REPORT.md, VIVA_PREP.md). The final browser pass (checklist 54–73) is ticked off by the developer before submission.** See [PROGRESS.md](PROGRESS.md) for exact status.
 
 ## Problem statement
 
@@ -21,9 +21,9 @@ Students want flexible income that fits around classes, but finding safe, short-
 | Jobs: create, edit, delete, close, cancel, browse, search, filter, sort, pagination | Built (Increment 3) |
 | Applications, shortlist / accept / reject, withdraw, status rules | Built and verified (Increment 4) |
 | Mark job completed, two-way reviews with rating summary, basic messaging, filing reports | Built and verified (Increment 5) |
-| Admin panel: statistics, suspend/reactivate users, remove/restore jobs and reviews, resolve reports, manage categories | Built (Increment 6, tests written, not yet run) |
-| Full verification, final report, viva prep | Increment 7 |
-| Learning resources: an admin attaches videos, links, and notes to a job; students see them on the job page and the apply page and can learn a missing skill before applying | Built (Increment 8, database tests written, not yet run) |
+| Admin panel: statistics, suspend/reactivate users, remove/restore jobs and reviews, resolve reports, manage categories | Built and verified (Increment 6) |
+| Final report, viva preparation, final checklist | Done (Increment 7): see docs/FINAL_REPORT.md and docs/VIVA_PREP.md |
+| Learning resources: an admin attaches videos, links, and notes to a job; students see them on the job page and the apply page and can learn a missing skill before applying | Built (Increment 8, server tests passed) |
 
 ## User roles
 
@@ -136,7 +136,7 @@ See [docs/TESTING.md](docs/TESTING.md) and [docs/MANUAL_VERIFICATION.md](docs/MA
 CampusGig-V1/
 ├── client/   React app (components, pages, layouts, hooks, context, services, utils, routes)
 ├── server/   Express API (config, constants, controllers, middleware, models, routes, services, utils, validators, seed, tests)
-├── docs/     SRS, architecture, database, API, testing, decisions, learning guide, ...
+├── docs/     SRS, architecture, database, API, testing, decisions, learning guide, final report, viva prep, ...
 ├── PROGRESS.md
 └── .env.example
 ```
@@ -150,7 +150,7 @@ Online payments and escrow, real-time chat, identity verification and trust badg
 - Messaging updates by checking every 5 seconds (not instant push); true real-time chat is Version 2. There is no appeal flow for suspended users, and suspension has no reason or expiry field; both are Version 2 ideas.
 - No profile photo upload (needs file storage; planned for Version 2). Initials are shown instead.
 - Email cannot be changed and there is no password reset or email verification yet.
-- The Increment 5 database tests have been written but not yet run (see PROGRESS.md).
+- Learning resources belong to one job and are added only by an admin; a shared library is a Version 2 idea.
 
 ## Project information
 

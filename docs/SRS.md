@@ -40,12 +40,12 @@ Status shows the increment in which each requirement is delivered. "Built" means
 | FR-10 | Anyone browses, searches, filters, sorts, and paginates jobs and opens job details (public pages) | 3 | Built |
 | FR-11 | Students apply once per open job; posters shortlist, accept, or reject; students can withdraw | 4 | Built |
 | FR-12 | Accepting an application starts the job and rejects all other pending applications | 4 | Built |
-| FR-13 | Posters mark jobs complete or cancel them | 5 | Built (tests written, not yet run) |
-| FR-14 | The poster and accepted student review each other once after completion | 5 | Built (tests written, not yet run) |
-| FR-15 | Participants exchange messages within a conversation tied to a job | 5 | Built (tests written, not yet run) |
-| FR-16 | Users report jobs or users; admins review, resolve, or dismiss reports | 5-6 | Built (tests written, not yet run) |
-| FR-17 | Admins view statistics, suspend/reactivate users, remove jobs and reviews, manage categories | 6 | Built (tests written, not yet run) |
-| FR-18 | An admin attaches learning resources (video, article, course, document, or plain information) to a job; students and visitors see them on the job page and on the apply page, so a student who lacks a required skill can learn it before applying | 8 | Built (DB-free tests pass; database tests written, not yet run) |
+| FR-13 | Posters mark jobs complete or cancel them | 5 | Built and verified |
+| FR-14 | The poster and accepted student review each other once after completion | 5 | Built and verified |
+| FR-15 | Participants exchange messages within a conversation tied to a job | 5 | Built and verified |
+| FR-16 | Users report jobs or users; admins review, resolve, or dismiss reports | 5-6 | Built and verified |
+| FR-17 | Admins view statistics, suspend/reactivate users, remove jobs and reviews, manage categories | 6 | Built and verified |
+| FR-18 | An admin attaches learning resources (video, article, course, document, or plain information) to a job; students and visitors see them on the job page and on the apply page, so a student who lacks a required skill can learn it before applying | 8 | Built (server tests passed; browser checklist 65-73 to confirm) |
 
 ## 6. Non-functional requirements
 | ID | Requirement |

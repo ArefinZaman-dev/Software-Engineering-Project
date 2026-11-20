@@ -109,6 +109,20 @@ Run `npm run seed`, then log in as `admin@campusgig.demo`.
 52. Categories: add "Video Editing" (it appears when posting a job); rename it; deactivate it (gone from the post-a-job list, existing jobs still show); try adding the same name again (error); delete an unused category; the Delete button is missing for a category with jobs.
 53. As a student or poster, type `/admin` in the address bar: you are sent away. A student calling an admin API directly gets 403.
 
+## 5e-2. Final end-to-end pass (Increment 7)
+Run `npm run seed` first so the data is fresh. This is one short walk through the whole product; tick each item before submission.
+54. Server: `cd server && npm test` shows 290 passed, 0 failed. `npm run lint` is clean in `server` and in `client`.
+55. Client: `cd client && npm run build` finishes without errors.
+56. As a visitor: Browse jobs works, a job opens, and the apply link asks you to log in.
+57. Register a new student and a new poster: both land on their own dashboard.
+58. As the poster: post a job; the new job appears in Browse jobs.
+59. As the student: apply to it; the poster sees the application under Applicants.
+60. As the poster: shortlist, message the student, accept; the job becomes In progress.
+61. As the poster: Mark as completed; both sides leave a review and the rating appears on the profile.
+62. As a student: report a job; as admin: the report appears under Needs attention and can be resolved.
+63. As admin: suspend a user (the user is blocked at once) and reactivate; remove and restore a job.
+64. Role safety: a student or poster who types `/admin` in the address bar is sent away; `/messages` as admin is sent back.
+
 ## 5f. Learning resources (Increment 8)
 These steps are numbered 65 onwards so they follow the Increment 7 final checklist (54-64). Run `npm run seed` again first (the seed now adds six demo resources), then start the server and client.
 65. Log in as `admin@campusgig.demo`. Dashboard > Jobs group shows a Learning resources count of 6.
