@@ -31,7 +31,7 @@ export default function AdminUsersPage() {
       description="Find people, and suspend or reactivate accounts. A suspended person is blocked immediately and hidden from the platform."
       filters={
         <div className="flex flex-wrap items-end gap-3">
-          <SearchBox label="Search by name or email" placeholder="e.g. nusrat" onSearch={(value) => list.setFilter('search', value)} />
+          <SearchBox label="Search by name or email" placeholder="e.g. arefin" onSearch={(value) => list.setFilter('search', value)} />
           <SelectFilter label="Role" value={list.filters.role} onChange={(value) => list.setFilter('role', value)} options={ROLE_OPTIONS} />
           <SelectFilter label="Status" value={list.filters.status} onChange={(value) => list.setFilter('status', value)} options={STATUS_OPTIONS} />
         </div>

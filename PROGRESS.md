@@ -105,7 +105,7 @@ Last updated: 20 Nov 2026
 - Role-based authorization and ownership checks enforced on the backend.
 - Student and Poster profiles (embedded in the User document), profile completeness, public profile view without private fields.
 - Student, Poster, and Admin dashboards (admin shows real user counts).
-- Seed script with an admin, 3 students, and 3 posters.
+- Seed script with an admin, 3 students, and 2 posters.
 - Client: login, register, profile pages, dashboards, protected routes, loading/empty/error states, frontend validation.
 
 **Files created:** 34 server source files, 5 server test files, 41 client source files, 9 documents in docs/ plus README and PROGRESS. Nothing from an earlier project was reused.
@@ -118,13 +118,13 @@ Verified end-to-end on the developer's own machine (Windows, MongoDB installed l
 |---|---|
 | `cd server && npm install` | Passed, 216 packages, 0 vulnerabilities |
 | `npm test` (server) | **51 passed, 0 failed** (auth 23, authorization 10, profiles 11, profileCompletion 7) |
-| `npm run seed` | Passed, created admin + 3 students + 3 posters |
+| `npm run seed` | Passed, created admin + 3 students + 2 posters |
 | `npm run dev` (server) | API started on http://localhost:5000 |
 | `cd client && npm install` | Passed, 282 packages |
 | `npm run dev` (client) | Vite started on http://localhost:5173 |
 | Browser: register, login/logout, session persistence | Confirmed working by the developer |
-| Browser: student dashboard for an incomplete profile (Farhana) | Confirmed: 50% complete, missing items listed correctly (location, bio, experience) - screenshot matched expectations exactly |
-| Browser: admin dashboard | Confirmed: total users 7, students 3, posters 3 - screenshot matched expectations exactly |
+| Browser: student dashboard for an incomplete profile (Nanziba Moon) | Confirmed: 50% complete, missing items listed correctly (location, bio, experience) - screenshot matched expectations exactly |
+| Browser: admin dashboard | Confirmed: total users 6, students 3, posters 2 - screenshot matched expectations exactly |
 | Client production build (`vite build`) | Not run at this stage (dev server only) |
 | ESLint (client and server) | Not run at this stage; clean from Increment 5 on |
 | Full manual checklist in MANUAL_VERIFICATION.md (items 1-12) | Partially done at this stage; the final pass is items 54-64 |
@@ -146,7 +146,7 @@ Verified end-to-end on the developer's own machine (Windows, MongoDB installed l
 ## Increment 3 - Job marketplace
 
 **Completed**
-- `Category` and `Job` models, `DEFAULT_CATEGORIES` constant, seed now creates 10 categories and 6 demo jobs (5 open, 1 closed) across the 3 demo posters.
+- `Category` and `Job` models, `DEFAULT_CATEGORIES` constant, seed now creates 10 categories and 6 demo jobs (5 open, 1 closed) across the 2 demo posters.
 - Job service: create, public discovery (search / filter by category, location, work type, budget / sort / paginate), public job details, poster's own job list (`/mine`), edit (open jobs only), delete (open jobs only), close, cancel - all enforced on the backend, matching Section 33's job status rules.
 - `GET /api/jobs`, `GET /api/jobs/:id`, `GET /api/categories` are public (no login required), matching Section 4 of the brief ("Public pages: ... Browse Jobs, Job Details").
 - Client: public Browse Jobs page (search box, category/work-type/location filters, sort, pagination, loading/empty/error states), public Job Details page (shows manage actions - edit/close/cancel/delete - only to the owning poster), poster's My Jobs page, Create/Edit Job pages sharing one `JobForm` component, updated navigation.

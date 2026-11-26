@@ -107,12 +107,11 @@ In development the client forwards `/api` requests to the server (see `client/vi
 | Role | Email | Password |
 |---|---|---|
 | Admin | `admin@campusgig.demo` | `Admin@12345` |
-| Student | `nusrat.jahan@campusgig.demo` | `Demo@12345` |
-| Student | `tanvir.ahmed@campusgig.demo` | `Demo@12345` |
-| Student (incomplete profile) | `farhana.akter@campusgig.demo` | `Demo@12345` |
-| Poster (individual) | `rafiq.hasan@campusgig.demo` | `Demo@12345` |
-| Poster (business) | `sadia.rahman@campusgig.demo` | `Demo@12345` |
-| Poster (organization) | `imran.hossain@campusgig.demo` | `Demo@12345` |
+| Student | `arefin.zaman@campusgig.demo` | `Demo@12345` |
+| Student | `adnan.sagar@campusgig.demo` | `Demo@12345` |
+| Student (incomplete profile) | `nanziba.moon@campusgig.demo` | `Demo@12345` |
+| Poster (individual) | `anika.anjum@campusgig.demo` | `Demo@12345` |
+| Poster (business) | `arpona.bristy@campusgig.demo` | `Demo@12345` |
 
 These are fake accounts with public passwords. Never use them or these passwords in a real deployment.
 

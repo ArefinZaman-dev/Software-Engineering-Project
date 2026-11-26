@@ -44,3 +44,18 @@
     }
   }
 }
+
+/* Fade-and-slide used when the learning resources panel opens. */
+@keyframes resources-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.resources-reveal {
+  animation: resources-reveal 0.2s ease-out;
+}

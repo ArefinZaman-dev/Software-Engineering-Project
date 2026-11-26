@@ -29,8 +29,21 @@ const admins = [{ name: 'CampusGig Admin', email: 'admin@campusgig.demo' }];
 
 const students = [
   {
-    name: 'Nusrat Jahan',
-    email: 'nusrat.jahan@campusgig.demo',
+    name: 'Shaikh Arefin Zaman',
+    email: 'arefin.zaman@campusgig.demo',
+    location: 'Mirpur, Dhaka',
+    bio: 'Third-year CSE student who likes building full-stack web apps and explaining maths to school students.',
+    studentProfile: {
+      university: 'Bangladesh University of Business and Technology',
+      department: 'Computer Science and Engineering',
+      skills: ['React', 'JavaScript', 'Math Tutoring'],
+      availability: AVAILABILITY.EVENINGS,
+      experience: 'Built a portfolio website for a family business and tutored two Class 8 students.',
+    },
+  },
+  {
+    name: 'Adnan Alam Sagar',
+    email: 'adnan.sagar@campusgig.demo',
     location: 'Mirpur, Dhaka',
     bio: 'Third-year CSE student who enjoys visual design. I take on posters, social media graphics, and simple branding work.',
     studentProfile: {
@@ -42,27 +55,14 @@ const students = [
     },
   },
   {
-    name: 'Tanvir Ahmed',
-    email: 'tanvir.ahmed@campusgig.demo',
-    location: 'Mirpur, Dhaka',
-    bio: 'CSE student who likes building small websites and explaining maths to school students.',
-    studentProfile: {
-      university: 'Bangladesh University of Business and Technology',
-      department: 'Computer Science and Engineering',
-      skills: ['React', 'JavaScript', 'Math Tutoring'],
-      availability: AVAILABILITY.EVENINGS,
-      experience: 'Built a portfolio website for a family business and tutored two Class 8 students.',
-    },
-  },
-  {
     // Deliberately incomplete, so the dashboard shows a partially filled profile.
-    name: 'Farhana Akter',
-    email: 'farhana.akter@campusgig.demo',
+    name: 'Nanziba Anzum Moon',
+    email: 'nanziba.moon@campusgig.demo',
     location: '',
     bio: '',
     studentProfile: {
       university: 'Bangladesh University of Business and Technology',
-      department: 'Business Administration',
+      department: 'Computer Science and Engineering',
       skills: ['Data Entry', 'Excel'],
       availability: AVAILABILITY.FLEXIBLE,
       experience: '',
@@ -72,32 +72,21 @@ const students = [
 
 const posters = [
   {
-    name: 'Rafiq Hasan',
-    email: 'rafiq.hasan@campusgig.demo',
+    name: 'Anika Anjum',
+    email: 'anika.anjum@campusgig.demo',
     location: 'Mirpur, Dhaka',
-    bio: 'Parent looking for reliable tutors and helpers for short home-based tasks.',
+    bio: 'Looking for reliable tutors and student helpers for short home-based and community tasks.',
     posterProfile: { organizationType: ORGANIZATION_TYPES.INDIVIDUAL, organizationName: '', website: '' },
   },
   {
-    name: 'Sadia Rahman',
-    email: 'sadia.rahman@campusgig.demo',
+    name: 'Arpona Rani Bristy',
+    email: 'arpona.bristy@campusgig.demo',
     location: 'Banani, Dhaka',
     bio: 'We are a small design studio that regularly needs help with social media content and data entry.',
     posterProfile: {
       organizationType: ORGANIZATION_TYPES.BUSINESS,
       organizationName: 'Riverline Design Studio (demo)',
       website: 'https://example.com',
-    },
-  },
-  {
-    name: 'Imran Hossain',
-    email: 'imran.hossain@campusgig.demo',
-    location: 'Uttara, Dhaka',
-    bio: 'A youth volunteer group that runs weekend events and needs student helpers.',
-    posterProfile: {
-      organizationType: ORGANIZATION_TYPES.ORGANIZATION,
-      organizationName: 'Green Valley Youth Foundation (demo)',
-      website: '',
     },
   },
 ];
@@ -151,15 +140,14 @@ async function seed() {
   // end up in any order, which previously gave jobs to the wrong poster.
   const posterDocs = await User.find({ role: ROLES.POSTER });
   const posterByEmail = Object.fromEntries(posterDocs.map((doc) => [doc.email, doc]));
-  const rafiq = posterByEmail['rafiq.hasan@campusgig.demo'];
-  const sadia = posterByEmail['sadia.rahman@campusgig.demo'];
-  const imran = posterByEmail['imran.hossain@campusgig.demo'];
+  const anika = posterByEmail['anika.anjum@campusgig.demo'];
+  const bristy = posterByEmail['arpona.bristy@campusgig.demo'];
 
   const inDays = (days) => new Date(Date.now() + days * 24 * 60 * 60 * 1000);
 
   const jobs = [
     {
-      poster: rafiq._id,
+      poster: anika._id,
       title: 'Weekend Math Tutor for a Class 9 Student',
       description:
         'Looking for a patient CSE or Math student to tutor my son in algebra and geometry twice a week. Sessions are at our home in Mirpur, about 90 minutes each. Please share a bit about your tutoring experience when you apply.',
@@ -173,7 +161,7 @@ async function seed() {
       status: JOB_STATUS.OPEN,
     },
     {
-      poster: sadia._id,
+      poster: bristy._id,
       title: 'Instagram Post Designs for a Spring Collection',
       description:
         'We need 10 square Instagram post designs for our spring clothing collection launch. We will share the product photos and brand colors. Canva or Figma files are both fine, as long as source files are included.',
@@ -187,7 +175,7 @@ async function seed() {
       status: JOB_STATUS.OPEN,
     },
     {
-      poster: sadia._id,
+      poster: bristy._id,
       title: 'Landing Page for a Small Design Studio',
       description:
         'We want a clean one-page website with our portfolio, services, and a contact form. React or plain HTML/CSS is fine. This could turn into ongoing work if it goes well.',
@@ -201,10 +189,10 @@ async function seed() {
       status: JOB_STATUS.OPEN,
     },
     {
-      poster: imran._id,
+      poster: anika._id,
       title: 'Student Volunteers for a Weekend Tree-Planting Event',
       description:
-        'We need 5 energetic student helpers for a Saturday morning tree-planting drive in Uttara. Duties include registration, guiding participants, and handing out saplings. Breakfast and a certificate provided.',
+        'I am organising a neighbourhood tree-planting drive and need 5 energetic student helpers on a Saturday morning in Uttara. Duties include registration, guiding participants, and handing out saplings. Breakfast and a certificate provided.',
       category: categoryByName['Event Staffing']._id,
       skills: ['Event Staffing', 'Communication'],
       budget: 1000,
@@ -215,10 +203,10 @@ async function seed() {
       status: JOB_STATUS.OPEN,
     },
     {
-      poster: imran._id,
-      title: 'Data Entry for a Volunteer Database',
+      poster: anika._id,
+      title: 'Data Entry for a Client Enquiry Database',
       description:
-        'We have about 600 paper registration forms from past events that need to be entered into a Google Sheet. We will share the template and a scanned copy of each form.',
+        'We have about 600 paper client enquiry forms from past projects that need to be entered into a Google Sheet. We will share the template and a scanned copy of each form.',
       category: categoryByName['Data Entry']._id,
       skills: ['Data Entry', 'Excel'],
       budget: 2500,
@@ -230,7 +218,7 @@ async function seed() {
     },
     {
       // Deliberately closed, so the seed shows more than one job status.
-      poster: rafiq._id,
+      poster: anika._id,
       title: 'Help Moving Furniture This Saturday',
       description:
         'Needed one or two students to help carry furniture from a second-floor apartment to a moving truck. Should take about 3 hours on Saturday morning.',
